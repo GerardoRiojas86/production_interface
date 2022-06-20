@@ -40,6 +40,10 @@ def add_contact():
         flash('Contact Added successfully')
         return redirect(url_for('Index'))
 
+@app.route('/report', methods=['GET'])
+def get_report():
+    return 'add report'
+
 @app.route('/edit/<id>')
 def get_contact(id):
     cur = mysql.connection.cursor()
