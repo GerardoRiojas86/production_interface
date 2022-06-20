@@ -23,11 +23,11 @@ def Index():
 @app.route('/add_contact', methods=['POST'])
 def add_contact():
     if request.method == 'POST':
-        Plan = request.form['Plan']
-        production = request.form['production']
-        down_time = request.form['down_time']
+        days = request.form['days']
+        model = request.form['model']
+        clip_machine = request.form['clip_machine']
         cur = mysql.connection.cursor()
-        cur.execute('INSERT INTO contacts (Plan, production, down_time) VALUES (%s, %s, %s)', (Plan, production, down_time))
+        cur.execute('INSERT INTO contacts (days, model, clip_machine) VALUES (%s, %s, %s)', (days, model, clip_machine))
         mysql.connection.commit()
         flash('Contact Added successfully')
         return redirect(url_for('Index'))
@@ -42,17 +42,17 @@ def get_contact(id):
 @app.route('/update/<id>', methods = ['POST'])
 def update_contact(id):
     if request.method == 'POST':
-        Plan = request.form['Plan']
-        production = request.form['production']
-        down_time = request.form['down_time']
+        days = request.form['days']
+        model = request.form['model']
+        clip_machine = request.form['clip_machine']
         cur = mysql.connection.cursor()
         cur.execute("""
             UPDATE contacts
-            SET Plan = %s,
-                down_time = %s,
-                production = %s
+            SET days = %s,
+                clip_machine = %s,
+                model = %s
             WHERE id = %s
-        """, (Plan, down_time, production, id))
+        """, (days, clip_machine, model, id))
         mysql.connection.commit()
         flash('Contact Updated Successfully')
         return redirect(url_for('Index'))
