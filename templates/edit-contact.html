@@ -6,19 +6,42 @@
     <div class="card card-body">
         <form action="/update/{{contact.0}}" method="POST">
             <div class="form-group">
-                <input type="text" name="fullname" placeholder="Fullname" value="{{ contact.1 }}" class="form-control">    
+                <input type="text" name="days" placeholder="Date" value="{{ contact.1 }}" class="form-control">
             </div>
             <div class="form-group">
-                <input type="text" name="phone" placeholder="Phone" value="{{ contact.2 }}" class="form-control">    
+                <input type="text" name="model" placeholder="Model" value="{{ contact.2 }}" class="form-control">    
             </div>
             <div class="form-group">
-                <input type="text" name="email" placeholder="Email" value="{{ contact.3 }}" class="form-control">    
+                <input type="text" name="clip_machine" placeholder="Clip Machine" value="{{ contact.3 }}" class="form-control">    
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-success btn-block">
-                    Save
-                </button>    
+                <input type="text" name="hours" placeholder="Hours" value="{{ contact.4 }}" class="form-control">
             </div>
+            <div class="form-group">
+                <input type="text" name="goal" placeholder="Goal" value="{{ contact.5 }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="rate" placeholder="Rate" value="{{ contact.6 }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="reality" placeholder="Real" value="{{ contact.7 }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="defects" placeholder="Defects" value="{{ contact.8 }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="defects_qty" placeholder="Defects Quantity" value="{{ contact.9 }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="down_time" placeholder="Down Time" value="{{ contact.10 }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="down_time_qty" placeholder="Down Time Quantity" value="{{ contact.11 }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success btn-block">
+                Save
+            </button>    
+            
             
         </form>
     </div>

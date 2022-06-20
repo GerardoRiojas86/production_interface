@@ -26,8 +26,16 @@ def add_contact():
         days = request.form['days']
         model = request.form['model']
         clip_machine = request.form['clip_machine']
+        hours = request.form['hours']
+        goal = request.form['goal']
+        rate = request.form['rate']
+        reality = request.form['reality']
+        defects = request.form['defects']
+        defects_qty = request.form['defects_qty']
+        down_time = request.form['down_time']
+        down_time_qty = request.form['down_time_qty']
         cur = mysql.connection.cursor()
-        cur.execute('INSERT INTO contacts (days, model, clip_machine) VALUES (%s, %s, %s)', (days, model, clip_machine))
+        cur.execute('INSERT INTO contacts (days, model, clip_machine, hours, goal, rate, reality, defects, defects_qty, down_time, down_time_qty) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)', (days, model, clip_machine, hours, goal, rate, reality, defects, defects_qty, down_time, down_time_qty))
         mysql.connection.commit()
         flash('Contact Added successfully')
         return redirect(url_for('Index'))
@@ -45,14 +53,30 @@ def update_contact(id):
         days = request.form['days']
         model = request.form['model']
         clip_machine = request.form['clip_machine']
+        hours = request.form['hours']
+        goal = request.form['goal']
+        rate = request.form['rate']
+        reality = request.form['reality']
+        defects = request.form['defects']
+        defects_qty = request.form['defects_qty']
+        down_time = request.form['down_time']
+        down_time_qty = request.form['down_time_qty']
         cur = mysql.connection.cursor()
         cur.execute("""
             UPDATE contacts
             SET days = %s,
                 clip_machine = %s,
-                model = %s
+                model = %s,
+                hours = %s,
+                goal = %s,
+                rate = %s,
+                reality = %s,
+                defects = %s,
+                defects_qty = %s,
+                down_time = %s,
+                down_time_qty = %s
             WHERE id = %s
-        """, (days, clip_machine, model, id))
+        """, (days, clip_machine, model, hours, goal, rate, reality, defects, defects_qty, down_time, down_time_qty, id))
         mysql.connection.commit()
         flash('Contact Updated Successfully')
         return redirect(url_for('Index'))
