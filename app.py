@@ -42,7 +42,13 @@ def add_contact():
 
 @app.route('/report', methods=['GET'])
 def get_report():
-    return 'add report'
+    cur = mysql.connection.cursor()
+    cur.execute('SELECT * FROM contacts ')
+    for tabla in cur:
+        print(tabla)
+    data = cur.fetchall()
+    return render_template('book_list.html', contact = data)
+    #return redirect(url_for('book_list.html'))
 
 @app.route('/edit/<id>')
 def get_contact(id):
