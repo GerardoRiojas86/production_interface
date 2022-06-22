@@ -92,20 +92,20 @@
             <tbody>
                 {% for contact in contacts %}
                     <tr>
-                        <td>{{ contact.1 }}</td>
-                        <td>{{ contact.2 }}</td>
-                        <td>{{ contact.3 }}</td>
-                        <td>{{ contact.4 }}</td>
-                        <td>{{ contact.5 }}</td>
-                        <td>{{ contact.6 }}</td>
-                        <td>{{ contact.7 }}</td>
-                        <td>{{ contact.8 }}</td>
-                        <td>{{ contact.9 }}</td>
-                        <td>{{ contact.10 }}</td>
-                        <td>{{ contact.11 }}</td>
+                        <td>{{ contact.days }}</td>
+                        <td>{{ contact.model }}</td>
+                        <td>{{ contact.clip_machine }}</td>
+                        <td>{{ contact.hours }}</td>
+                        <td>{{ contact.goal }}</td>
+                        <td>{{ contact.rate }}</td>
+                        <td>{{ contact.reality }}</td>
+                        <td>{{ contact.defects }}</td>
+                        <td>{{ contact.defects_qty }}</td>
+                        <td>{{ contact.down_time }}</td>
+                        <td>{{ contact.down_time_qty }}</td>
                         <td>
-                            <a href="/edit/{{contact.0}}" class="btn btn-secondary">Edit</a>
-                            <a href="/delete/{{contact.0}}" class="btn btn-danger">Delete</a>
+                            <a href="/edit/{{contact.id}}" class="btn btn-secondary">Edit</a>
+                            <a href="/delete/{{contact.id}}" class="btn btn-danger">Delete</a>
                         </td>
                     </tr>
                 {% endfor %}
