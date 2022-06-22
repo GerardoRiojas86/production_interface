@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 
 import os
 
@@ -97,4 +99,3 @@ def delete_contact(id):
 @app.teardown_appcontext
 def remove_session(*args, **kwargs):
     app.session.remove()
-    
