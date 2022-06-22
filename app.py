@@ -1,14 +1,25 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_mysqldb import MySQL
+# from flask_mysqldb import MySQL
+from flask import _app_ctx_stack
+
+from flask_cors import CORS
+
+from sqlalchemy.orm import scoped_session
+
+from . import models
+from .database import SessionLocal, engine
 
 app = Flask(__name__)
 
+CORS(app)
+
+app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack.__ident_func__)
 # Mysql Connection
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Desarrollo1169'
-app.config['MYSQL_DB'] = 'flaskcontacts'
-mysql = MySQL(app)
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'flaskcontacts'
+# mysql = MySQL(app)
 
 #settings
 app.secret_key = 'mysecretkey'
@@ -99,5 +110,8 @@ def delete_contact(id):
     flash('Contact Removed Successfully')
     return redirect(url_for('Index'))
 
+@app.teardown_appcontext
+def remove_session(*args, **kwargs):
+    app.session.remove()
 if __name__ == '__main__':
     app.run(port = 80, debug = True)
