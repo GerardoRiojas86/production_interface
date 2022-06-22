@@ -12,7 +12,7 @@ from .database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-template_dir = os.path.abspath('../production_interface/templates')
+template_dir = os.path.abspath('../production_interface/app/templates')
 
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
