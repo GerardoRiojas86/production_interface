@@ -10,7 +10,7 @@ from sqlalchemy.orm import scoped_session
 from . import models
 from .database import SessionLocal, engine
 
-# models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine)
 
 # template_dir = os.path.abspath('../production_interface/app/templates')
 
