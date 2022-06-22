@@ -14,6 +14,8 @@ models.Base.metadata.create_all(bind=engine)
 
 template_dir = os.path.abspath('../production_interface/app/templates')
 
+print(f'Using template directory: {template_dir}')
+
 app = Flask(__name__, template_folder=template_dir)
 CORS(app)
                                                      
