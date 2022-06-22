@@ -4,10 +4,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Sqlite connection string - for testing purposes
-# SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
 # Mysql connection string
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:@127.0.0.1/flaskcontacts"
+# SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:@127.0.0.1/flaskcontacts"
 
 # mysql connection has specific connect
 if SQLALCHEMY_DATABASE_URL.find('mysql') != -1 :
