@@ -29,12 +29,21 @@
 1. Create a python virtual environment with command ```python -m venv venv```
 2. Upgrade pip with command ```pip install --upgrade pip```
 3. Install python requirements via ```pip install -r requirements```
-4. Run the flask app ```export FLASK_APP=app.main && flask run --reload```
+4. Run the flask app ```flask run --reload```
 
 ### Deployments
 
-We use heroku to deploy the app
+To deploy the app (in heroku):
+1. Install heroku cli
+2. Deploy main branch to heroku with command
+   ```git push heroku main```
 
-
+   Deploy ANY branch to heroku with command
+   ```git push heroku your-branch-name:main```
+   
+The following files are required to deploy the app in Heroku:
+* Procfile, defines the app python process and how it will be run
+* runtime.txt, set the python version used to deploy the app
+* app/wsgi.py, flask app executor used in combination with gunicorn 
 
 
