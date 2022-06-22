@@ -12,11 +12,11 @@ from .database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-template_dir = os.path.abspath('../production_interface/app/templates')
+# template_dir = os.path.abspath('../production_interface/app/templates')
 
-print(f'Using template directory: {template_dir}')
+# print(f'Using template directory: {template_dir}')
 
-app = Flask(__name__, template_folder=template_dir)
+app = Flask(__name__)
 CORS(app)
                                                      
 app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack)
