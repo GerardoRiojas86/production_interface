@@ -35,8 +35,15 @@
 
 To deploy the app (in heroku):
 1. Install heroku cli
-2. Deploy a branch to heroku
+2. Deploy main branch to heroku with command
+   ```git push heroku main```
 
-
+   Deploy ANY branch to heroku with command
+   ```git push heroku your-branch-name:main```
+   
+The following files are required to deploy the app in Heroku:
+* Procfile, defines the app python process and how it will be run
+* runtime.txt, set the python version used to deploy the app
+* app/wsgi.py, flask app executor used in combination with gunicorn 
 
 
