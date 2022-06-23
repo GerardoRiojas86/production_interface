@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="row">
+  <form action="/report" method="POST">
+    <div class="row">
+        <label for="inputShiftDate" class="col-sm-3 col-form-label">Shift date</label>
+        <div class="col-sm-3">
+            <input type='text' id="inputShiftDate" name="shift_date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <button type="submit" class="btn btn-outline-success">
+          Get shift report
+        </button>
+      </div>
+    </div>    
+  </form>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Productivity report</h1>
+      <h2>Shift date: {{shift_date}}</h2>
+      <canvas id="productivityChart" height="100"></canvas>
+    </div>
+  </div>  
+</div>
+
+
+<script>
+  const ctx = document.getElementById('productivityChart');
+  const labels = ["7:00","8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00"]
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: 'Rate',
+      data: {{daily_rate}},
+      fill: false,
+      borderColor: 'rgb(20,36, 178)',
+      tension: 0.1
+    },
+    {
+      label: 'Goal',
+      data: {{daily_goal}},
+      fill: false,
+      borderColor: 'rgb(209, 120, 17)',
+      tension: 0.1
+    },
+    {
+      label: 'Reality',
+      data: {{daily_reality}},
+      fill: false,
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
+    }]
+  };  
+
+  new Chart(document.getElementById("productivityChart"), {
+    type: 'line',
+    data: data,
+  });
+</script>
+
+{% endblock %}

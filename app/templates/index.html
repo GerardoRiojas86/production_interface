@@ -20,46 +20,144 @@
 
         <div class="card card-body">
             <form action="/add_contact" method="POST">
-                <div class="form-group">
-                    <input type="text" name="days" placeholder="Date" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="model" placeholder="Model" class="form-control">    
-                </div>
-                <div class="form-group">
-                    <input type="text" name="clip_machine" placeholder="Clip Machine" class="form-control">    
-                </div>
-                <div class="form-group">
-                    <input type="text" name="hours" placeholder="Hours" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="goal" placeholder="Goal" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="rate" placeholder="Rate" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="reality" placeholder="Real" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="defects" placeholder="Defects" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="defects_qty" placeholder="Defects Quantity" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="down_time" placeholder="Down Time" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="down_time_qty" placeholder="Down Time Quantity" class="form-control">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Save
-                    </button>    
+                <div class="row mb-3">
+                    <label for="inputShiftDate" class="col-sm-3 col-form-label">Shift date</label>
+                    <div class="col-sm-9">
+                        <input type='text' id="inputShiftDate" name="shift_date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
+                    </div>
                 </div>
 
-                
+                <div class="row mb-3">
+                    <label for="inputShiftHours" class="col-sm-3 col-form-label">Shift hours</label>
+                    <div class="col-sm-9">
+                        <select class="form-select" id="inputShiftHours" name="shift_hours" aria-label="Select the shift date">
+                            <option selected>Choose the shift time</option>
+                            <option value="7:00">7:00</option>
+                            <option value="8:00">8:00</option>
+                            <option value="9:00">9:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="12:00">12:00</option>
+                            <option value="13:00">13:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                            <option value="19:00">19:00</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputModel" class="col-sm-3 col-form-label">Model</label>
+                    <div class="col-sm-9">
+                        <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
+                            <option selected>Choose the model</option>
+                            <option value="frt lh">frt lh</option>
+                            <option value="frt rh">frt rh</option>
+                            <option value="rr lh">rr lh</option>
+                            <option value="rr rh">rr rh</option>
+                            <option value="frt lh A">frt lh A</option>
+                            <option value="frt rh A">frt rh A</option>
+                            <option value="rr lh A">rr lh A</option>
+                            <option value="rr rh A">rr rh A</option>
+                            <option value="frt lh B">frt lh B</option>
+                            <option value="frt rh B">frt rh B</option>
+                            <option value="rr lh B">rr lh B</option>
+                            <option value="rr rh B">rr rh B</option>
+                        </select>                          
+                    </div>
+                </div>
+
+
+                <div class="row mb-3">
+                    <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
+                    <div class="col-sm-9">
+                        <select class="form-select" id="inputClipMachine" name="clip_machine" aria-label="Select the Clip  machine">
+                            <option selected>Choose the Clip machine</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>                         
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputGoal" class="col-sm-3 col-form-label">Goal</label>
+                    <div class="col-sm-9">
+                        <input type="number" id="inputGoal" name="goal" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputRate" class="col-sm-3 col-form-label">Rate</label>
+                    <div class="col-sm-9">
+                        <input type="number" id="inputRate" name="rate" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputReal" class="col-sm-3 col-form-label">Real</label>
+                    <div class="col-sm-9">
+                        <input type="number" id="inputReal" name="reality" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputDefects" class="col-sm-3 col-form-label">Defects</label>
+                    <div class="col-sm-9">
+                        <select id="inputDefects" name="defects" class="form-select" aria-label="Select the defect reason">
+                            <option selected>Choose the defect reason</option>
+                            <option value="Long pieces">Long pieces</option>
+                            <option value="Short pieces">Short pieces</option>
+                            <option value="Damage hole">Damage hole</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputDefectsQty" class="col-sm-3 col-form-label">Defects quantity</label>
+                    <div class="col-sm-9">
+                        <input type="number" id="inputDefectsQty" name="defects_qty" class="form-control">
+                    </div>
+                </div>
+
+
+                <div class="row mb-3">
+                    <label for="inputDownTimeReason" class="col-sm-3 col-form-label">Downtime Reason</label>
+                    <div class="col-sm-9">
+                        <select id="inputDownTimeReason" name="down_time_reason" class="form-select" aria-label="Select the downtime reason">
+                            <option selected>Choose the downtime reason</option>
+                            <option value="Lack of personnel">Lack of personnel</option>
+                            <option value="Lunch time">Lunch time</option>
+                            <option value="Start of operations">Start of operations</option>
+                            <option value="Machine not working">Machine not working</option>
+                            <option value="Bad material">Bad material</option>
+                            <option value="Change container">Change container</option> 
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label for="inputDowntimeQty" class="col-sm-3 col-form-label">Downtime Quantity</label>
+                    <div class="col-sm-9">
+                        <input type="number" id="inputDowntimeQty" name="down_time_qty" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Save
+                        </button>
+                    </div>
+                </div>
+  
             </form>
             <form action="/report">
                 <div>
@@ -72,36 +170,36 @@
         </div>
     </div>
     <div class="col-md-7">
-        <table class="table table-striped table-bordered bg-white table-sm">
+        <table class="table table-hover">
             <thead>
                 <tr>
-                    <td>days</td>
-                    <td>model</td>
-                    <td>clip_machine</td>
-                    <td>hours</td>
-                    <td>goal</td>
-                    <td>rate</td>
-                    <td>reality</td>
-                    <td>defects</td>
-                    <td>defects_qty</td>
-                    <td>down_time</td>
-                    <td>down_time_qty</td>
-                    <td>Operations</td>
+                    <th>Shift date</th>
+                    <th>Shift hours</th>
+                    <th>Model</th>
+                    <th>Clip machine</th>
+                    <th>Goal</th>
+                    <th>Rate</th>
+                    <th>Reality</th>
+                    <th>Defects</th>
+                    <th>Defects Quantity</th>
+                    <th>Downtime Reason</th>
+                    <th>Downtime Quantity</th>
+                    <th>Operations</th>
                 </tr>
             </thead>
             <tbody>
                 {% for contact in contacts %}
                     <tr>
-                        <td>{{ contact.days }}</td>
+                        <td>{{ contact.shift_date }}</td>
+                        <td>{{ contact.shift_hours }}</td>
                         <td>{{ contact.model }}</td>
                         <td>{{ contact.clip_machine }}</td>
-                        <td>{{ contact.hours }}</td>
                         <td>{{ contact.goal }}</td>
                         <td>{{ contact.rate }}</td>
                         <td>{{ contact.reality }}</td>
                         <td>{{ contact.defects }}</td>
                         <td>{{ contact.defects_qty }}</td>
-                        <td>{{ contact.down_time }}</td>
+                        <td>{{ contact.down_time_reason }}</td>
                         <td>{{ contact.down_time_qty }}</td>
                         <td>
                             <a href="/edit/{{contact.id}}" class="btn btn-secondary">Edit</a>
@@ -114,7 +212,11 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+    });
+ </script>
 
 
 {% endblock %}
