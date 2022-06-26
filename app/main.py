@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import datetime
-
+import pandas as pd 
 import werkzeug
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, jsonify
 from flask_cors import CORS
@@ -15,6 +15,7 @@ from .database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = Flask(__name__)
+
 CORS(app)
                                                      
 app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack)
@@ -23,9 +24,32 @@ app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack)
 app.secret_key = 'mysecretkey'
 
 @app.route('/')
-def Index():
-    contacts = app.session.query(models.Contact).all()
-    return render_template('index.html', contacts = contacts)
+def index():
+
+    shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
+    shift_date_data = app.session.query(models.Contact).filter_by(shift_date=shift_date).order_by(models.Contact.shift_hours.asc()).all()
+    shift_data_query= app.session.query(models.Contact).filter_by(shift_date=shift_date).order_by(models.Contact.shift_hours.asc()).statement
+    
+    shift_data_df = pd.read_sql_query(
+      sql= shift_data_query,
+      con=engine)
+
+    print(shift_data_df)
+    print('-----------------')
+    down_time_group_sum = shift_data_df.groupby('down_time_reason').sum()
+    down_time_sum_labels = [val for val in down_time_group_sum.index.values]
+    down_time_sum_qty = down_time_group_sum['down_time_qty'].tolist()
+    print(down_time_sum_labels)
+    print(down_time_sum_qty)
+
+    return render_template('dashboard.html', 
+                            shift_date=shift_date, 
+                            data=shift_date_data, 
+                            rate=shift_data_df['rate'].tolist(), 
+                            goal=shift_data_df['goal'].tolist(), 
+                            reality=shift_data_df['reality'].tolist(),
+                            downtime_labels= down_time_sum_labels,
+                            downtime_sum=down_time_sum_qty)
 
 @app.route('/add_contact', methods=['POST'])
 def add_contact():
@@ -48,7 +72,7 @@ def add_contact():
         app.session.add(contact)
         app.session.commit()
         flash('Contact Added successfully')
-        return redirect(url_for('Index'))
+        return redirect(url_for('index'))
 
 @app.route('/report', methods=['GET', 'POST'])
 def get_report():  
@@ -102,7 +126,7 @@ def update_contact(id):
         app.session.commit()
 
         flash('Contact Updated Successfully')
-        return redirect(url_for('Index'))
+        return redirect(url_for('index'))
 
 @app.route('/delete/<string:id>')
 def delete_contact(id):
@@ -111,7 +135,7 @@ def delete_contact(id):
     app.session.commit()
 
     flash('Contact Removed Successfully')
-    return redirect(url_for('Index'))
+    return redirect(url_for('index'))
 
 @app.teardown_appcontext
 def remove_session(*args, **kwargs):
