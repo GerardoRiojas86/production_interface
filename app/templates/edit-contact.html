@@ -5,46 +5,158 @@
 <div class="col-md-4 offset-md-4">
     <div class="card card-body">
         <form action="/update/{{contact.id}}" method="POST">
-            <div class="form-group">
-                <input type="text" name="days" placeholder="Date" value="{{ contact.1 }}" class="form-control">
+            <div class="row mb-3">
+                <label for="inputShiftDate" class="col-sm-3 col-form-label">Shift date</label>
+                <div class="col-sm-9">
+                    <input type='text' id="inputShiftDate" name="shift_date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="model" placeholder="Model" value="{{ contact.2 }}" class="form-control">    
+
+            <div class="row mb-3">
+                <label for="inputShiftHours" class="col-sm-3 col-form-label">Shift hours</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputShiftHours" name="shift_hours" aria-label="Select the shift date">
+                        <option selected>Choose the shift time</option>
+                        <option value="7:00">7:00</option>
+                        <option value="8:00">8:00</option>
+                        <option value="9:00">9:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                        <option value="19:00">19:00</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="clip_machine" placeholder="Clip Machine" value="{{ contact.3 }}" class="form-control">    
+
+            <div class="row mb-3">
+                <label for="inputModel" class="col-sm-3 col-form-label">Model</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
+                        <option selected>Choose the model</option>
+                        <option value="frt lh">frt lh</option>
+                        <option value="frt rh">frt rh</option>
+                        <option value="rr lh">rr lh</option>
+                        <option value="rr rh">rr rh</option>
+                        <option value="frt lh A">frt lh A</option>
+                        <option value="frt rh A">frt rh A</option>
+                        <option value="rr lh A">rr lh A</option>
+                        <option value="rr rh A">rr rh A</option>
+                        <option value="frt lh B">frt lh B</option>
+                        <option value="frt rh B">frt rh B</option>
+                        <option value="rr lh B">rr lh B</option>
+                        <option value="rr rh B">rr rh B</option>
+                    </select>                          
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="hours" placeholder="Hours" value="{{ contact.4 }}" class="form-control">
+
+
+            <div class="row mb-3">
+                <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputClipMachine" name="clip_machine" aria-label="Select the Clip  machine">
+                        <option selected>Choose the Clip machine</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>                         
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="goal" placeholder="Goal" value="{{ contact.5 }}" class="form-control">
+
+            <div class="row mb-3">
+                <label for="inputGoal" class="col-sm-3 col-form-label">Goal</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputGoal" name="goal" class="form-control">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="rate" placeholder="Rate" value="{{ contact.6 }}" class="form-control">
+
+            <div class="row mb-3">
+                <label for="inputRate" class="col-sm-3 col-form-label">Rate</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputRate" name="rate" class="form-control">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="reality" placeholder="Real" value="{{ contact.7 }}" class="form-control">
+
+            <div class="row mb-3">
+                <label for="inputReal" class="col-sm-3 col-form-label">Real</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputReal" name="reality" class="form-control">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="defects" placeholder="Defects" value="{{ contact.8 }}" class="form-control">
+
+            <div class="row mb-3">
+                <label for="inputDefects" class="col-sm-3 col-form-label">Defects</label>
+                <div class="col-sm-9">
+                    <select id="inputDefects" name="defects" class="form-select" aria-label="Select the defect reason">
+                        <option selected>Choose the defect reason</option>
+                        <option value="Long pieces">Long pieces</option>
+                        <option value="Short pieces">Short pieces</option>
+                        <option value="Damage hole">Damage hole</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="defects_qty" placeholder="Defects Quantity" value="{{ contact.9 }}" class="form-control">
+
+            <div class="row mb-3">
+                <label for="inputDefectsQty" class="col-sm-3 col-form-label">Defects quantity</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputDefectsQty" name="defects_qty" class="form-control">
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="down_time" placeholder="Down Time" value="{{ contact.10 }}" class="form-control">
+
+
+            <div class="row mb-3">
+                <label for="inputDownTimeReason" class="col-sm-3 col-form-label">Downtime Reason</label>
+                <div class="col-sm-9">
+                    <select id="inputDownTimeReason" name="down_time_reason" class="form-select" aria-label="Select the downtime reason">
+                        <option selected>Choose the downtime reason</option>
+                        <option value="Lack of personnel">Lack of personnel</option>
+                        <option value="Lunch time">Lunch time</option>
+                        <option value="Start of operations">Start of operations</option>
+                        <option value="Machine not working">Machine not working</option>
+                        <option value="Bad material">Bad material</option>
+                        <option value="Change container">Change container</option> 
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" name="down_time_qty" placeholder="Down Time Quantity" value="{{ contact.11 }}" class="form-control">
+
+            <div class="row mb-3">
+                <label for="inputDowntimeQty" class="col-sm-3 col-form-label">Downtime Quantity</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputDowntimeQty" name="down_time_qty" class="form-control">
+                </div>
             </div>
-            <button type="submit" class="btn btn-success btn-block">
-                Save
-            </button>    
-            
-            
+
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Save
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 </div>
 
+<script>
+    function selectElement(id, valueToSelect) {    
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+
+    selectElement('inputShiftHours','{{contact.shift_hours}}');
+    selectElement('inputDownTimeReason','{{contact.down_time_reason}}');
+    selectElement('inputDefects','{{contact.defects}}');
+    selectElement('inputModel','{{contact.model}}');
+    selectElement('inputClipMachine','{{contact.clip_machine}}');
+    
+</script>
 {% endblock %}

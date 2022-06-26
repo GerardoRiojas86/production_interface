@@ -1,21 +1,22 @@
-
+import datetime
 from sqlalchemy import Column, Float, Integer, String
-from sqlalchemy.types import Date
+from sqlalchemy.types import Date, DateTime
 from .database import Base
-
 
 class Contact(Base):
     __tablename__ = 'contacts'
 
     id = Column(Integer, primary_key=True, index=True)
-    days = Column(Integer, default=0)
-    clip_machine = Column(String(254))
-    model = Column(String(254))
-    hours = Column(Integer)
-    goal = Column(String(254))
-    rate = Column(Float)
-    reality = Column(Float)
-    defects = Column(String(254))
-    defects_qty = Column(Integer)
-    down_time = Column(Integer)
-    down_time_qty = Column(Integer)
+    shift_date = Column(Date) # Date of the shift recorded YYYY-mm-dd
+    shift_hours = Column(Integer) # Hours in which the shift lasted
+    clip_machine = Column(String(254)) # Machine producing pieces
+    model = Column(String(254)) # Model of the piece produced by clip_machine
+    goal = Column(Integer) # Expected number of pieces to  be produced during the shift
+    rate = Column(Integer) # Rate of pieces the machine can produce
+    reality = Column(Integer) # Actual number of pieces produced during the shift
+    defects = Column(String(254)) # Defect root cause
+    defects_qty = Column(Integer) # Number of defected pieces 
+    down_time_reason = Column(String(254)) # Reason of downtime
+    down_time_qty = Column(Integer) # Minutes of no production 
+    created_at = Column(DateTime, default=datetime.datetime.now())
+    updated_at = Column(DateTime, onupdate=datetime.datetime.now())

@@ -34,7 +34,7 @@
 ### Deployments
 
 To deploy the app (in heroku):
-1. Install heroku cli
+1. Install heroku cli <https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli>
 2. Deploy main branch to heroku with command
    ```git push heroku main```
 
