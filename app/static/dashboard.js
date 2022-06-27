@@ -73,7 +73,7 @@ function graphDailyProductivity(chartId, rate, goal, reality) {
 
 }
 
-function graphDailyDowntime(chartId, labels, data) {
+function graphDoughnut(chartId, labels, data, colors, title) {
   'use strict'
 
   feather.replace({ 'aria-hidden': 'true' })
@@ -86,9 +86,9 @@ function graphDailyDowntime(chartId, labels, data) {
     data: {
       labels: labels,
       datasets: [{
-        label: 'Downtime by reason',
+        label: title,
         data: data,
-        backgroundColor: [],
+        backgroundColor: colors,
         hoverOffset: 4
       }]
     }

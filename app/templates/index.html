@@ -1,222 +1,254 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
-{% block body %}
+{% block modal %}
 
-<!-- <div class="row">
-    <div class="col-md-5">
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>    
-            </button>
+<div class="modal fade" id="addContactModal" tabindex="-1" aria-labelledby="addContactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form action="/add_contact" method="POST"> 
+        <div class="modal-header">
+          <h5 class="modal-title" id="addContactModalLabel">Shift report details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-
-        <div class="card card-body">
-            <form action="/add_contact" method="POST">
-                <div class="row mb-3">
-                    <label for="inputShiftDate" class="col-sm-3 col-form-label">Shift date</label>
-                    <div class="col-sm-9">
-                        <input type='text' id="inputShiftDate" name="shift_date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputShiftHours" class="col-sm-3 col-form-label">Shift hours</label>
-                    <div class="col-sm-9">
-                        <select class="form-select" id="inputShiftHours" name="shift_hours" aria-label="Select the shift date">
-                            <option selected>Choose the shift time</option>
-                            <option value="7:00">7:00</option>
-                            <option value="8:00">8:00</option>
-                            <option value="9:00">9:00</option>
-                            <option value="10:00">10:00</option>
-                            <option value="11:00">11:00</option>
-                            <option value="12:00">12:00</option>
-                            <option value="13:00">13:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="15:00">15:00</option>
-                            <option value="16:00">16:00</option>
-                            <option value="17:00">17:00</option>
-                            <option value="18:00">18:00</option>
-                            <option value="19:00">19:00</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputModel" class="col-sm-3 col-form-label">Model</label>
-                    <div class="col-sm-9">
-                        <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
-                            <option selected>Choose the model</option>
-                            <option value="frt lh">frt lh</option>
-                            <option value="frt rh">frt rh</option>
-                            <option value="rr lh">rr lh</option>
-                            <option value="rr rh">rr rh</option>
-                            <option value="frt lh A">frt lh A</option>
-                            <option value="frt rh A">frt rh A</option>
-                            <option value="rr lh A">rr lh A</option>
-                            <option value="rr rh A">rr rh A</option>
-                            <option value="frt lh B">frt lh B</option>
-                            <option value="frt rh B">frt rh B</option>
-                            <option value="rr lh B">rr lh B</option>
-                            <option value="rr rh B">rr rh B</option>
-                        </select>                          
-                    </div>
-                </div>
-
-
-                <div class="row mb-3">
-                    <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
-                    <div class="col-sm-9">
-                        <select class="form-select" id="inputClipMachine" name="clip_machine" aria-label="Select the Clip  machine">
-                            <option selected>Choose the Clip machine</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                        </select>                         
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputGoal" class="col-sm-3 col-form-label">Goal</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="inputGoal" name="goal" class="form-control">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputRate" class="col-sm-3 col-form-label">Rate</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="inputRate" name="rate" class="form-control">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputReal" class="col-sm-3 col-form-label">Real</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="inputReal" name="reality" class="form-control">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputDefects" class="col-sm-3 col-form-label">Defects</label>
-                    <div class="col-sm-9">
-                        <select id="inputDefects" name="defects" class="form-select" aria-label="Select the defect reason">
-                            <option selected>Choose the defect reason</option>
-                            <option value="Long pieces">Long pieces</option>
-                            <option value="Short pieces">Short pieces</option>
-                            <option value="Damage hole">Damage hole</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputDefectsQty" class="col-sm-3 col-form-label">Defects quantity</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="inputDefectsQty" name="defects_qty" class="form-control">
-                    </div>
-                </div>
-
-
-                <div class="row mb-3">
-                    <label for="inputDownTimeReason" class="col-sm-3 col-form-label">Downtime Reason</label>
-                    <div class="col-sm-9">
-                        <select id="inputDownTimeReason" name="down_time_reason" class="form-select" aria-label="Select the downtime reason">
-                            <option selected>Choose the downtime reason</option>
-                            <option value="Lack of personnel">Lack of personnel</option>
-                            <option value="Lunch time">Lunch time</option>
-                            <option value="Start of operations">Start of operations</option>
-                            <option value="Machine not working">Machine not working</option>
-                            <option value="Bad material">Bad material</option>
-                            <option value="Change container">Change container</option> 
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <label for="inputDowntimeQty" class="col-sm-3 col-form-label">Downtime Quantity</label>
-                    <div class="col-sm-9">
-                        <input type="number" id="inputDowntimeQty" name="down_time_qty" class="form-control">
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-sm-12">
-                        <button type="submit" class="btn btn-primary btn-block">
-                            Save
-                        </button>
-                    </div>
-                </div>
-  
-            </form>
-            <form action="/report">
-                <div>
-                    <button type="submit" class="btn btn-outline-success">
-                        Shift Report
-                    </button>
-                </div>
-            </form>
-            
+        <div class="modal-body">
+          <!-- <form action="/add_contact" method="POST"> -->
+          <div class="row mb-3">
+              <label for="inputShiftDate" class="col-sm-3 col-form-label">Shift date</label>
+              <div class="col-sm-9">
+                <input type='text' id="inputShiftDate" name="shift_date" class="form-control" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputShiftHours" class="col-sm-3 col-form-label">Shift hours</label>
+              <div class="col-sm-9">
+                  <select class="form-select" id="inputShiftHours" name="shift_hours" aria-label="Select the shift date">
+                      <option selected>Choose the shift time</option>
+                      <option value="7:00">7:00</option>
+                      <option value="8:00">8:00</option>
+                      <option value="9:00">9:00</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="13:00">13:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                      <option value="18:00">18:00</option>
+                      <option value="19:00">19:00</option>
+                  </select>
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputModel" class="col-sm-3 col-form-label">Model</label>
+              <div class="col-sm-9">
+                  <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
+                      <option selected>Choose the model</option>
+                      <option value="frt lh">frt lh</option>
+                      <option value="frt rh">frt rh</option>
+                      <option value="rr lh">rr lh</option>
+                      <option value="rr rh">rr rh</option>
+                      <option value="frt lh A">frt lh A</option>
+                      <option value="frt rh A">frt rh A</option>
+                      <option value="rr lh A">rr lh A</option>
+                      <option value="rr rh A">rr rh A</option>
+                      <option value="frt lh B">frt lh B</option>
+                      <option value="frt rh B">frt rh B</option>
+                      <option value="rr lh B">rr lh B</option>
+                      <option value="rr rh B">rr rh B</option>
+                  </select>                          
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
+              <div class="col-sm-9">
+                  <select class="form-select" id="inputClipMachine" name="clip_machine" aria-label="Select the Clip  machine">
+                      <option selected>Choose the Clip machine</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                      <option value="6">6</option>
+                      <option value="7">7</option>
+                      <option value="8">8</option>
+                      <option value="9">9</option>
+                  </select>                         
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputGoal" class="col-sm-3 col-form-label">Goal</label>
+              <div class="col-sm-9">
+                  <input type="number" id="inputGoal" name="goal" class="form-control">
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputRate" class="col-sm-3 col-form-label">Rate</label>
+              <div class="col-sm-9">
+                  <input type="number" id="inputRate" name="rate" class="form-control">
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputReal" class="col-sm-3 col-form-label">Real</label>
+              <div class="col-sm-9">
+                  <input type="number" id="inputReal" name="reality" class="form-control">
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputDefects" class="col-sm-3 col-form-label">Defects</label>
+              <div class="col-sm-9">
+                  <select id="inputDefects" name="defects" class="form-select" aria-label="Select the defect reason">
+                      <option selected>Choose the defect reason</option>
+                      <option value="Long pieces">Long pieces</option>
+                      <option value="Short pieces">Short pieces</option>
+                      <option value="Damage hole">Damage hole</option>
+                  </select>
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputDefectsQty" class="col-sm-3 col-form-label">Defects quantity</label>
+              <div class="col-sm-9">
+                  <input type="number" id="inputDefectsQty" name="defects_qty" class="form-control">
+              </div>
+          </div>
+        
+        
+          <div class="row mb-3">
+              <label for="inputDownTimeReason" class="col-sm-3 col-form-label">Downtime Reason</label>
+              <div class="col-sm-9">
+                  <select id="inputDownTimeReason" name="down_time_reason" class="form-select" aria-label="Select the downtime reason">
+                      <option selected>Choose the downtime reason</option>
+                      <option value="Lack of personnel">Lack of personnel</option>
+                      <option value="Lunch time">Lunch time</option>
+                      <option value="Start of operations">Start of operations</option>
+                      <option value="Machine not working">Machine not working</option>
+                      <option value="Bad material">Bad material</option>
+                      <option value="Change container">Change container</option> 
+                  </select>
+              </div>
+          </div>
+        
+          <div class="row mb-3">
+              <label for="inputDowntimeQty" class="col-sm-3 col-form-label">Downtime Quantity</label>
+              <div class="col-sm-9">
+                  <input type="number" id="inputDowntimeQty" name="down_time_qty" class="form-control">
+              </div>
+          </div>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+        </div>
+      </form>        
     </div>
-    <div class="col-md-7">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Shift date</th>
-                    <th>Shift hours</th>
-                    <th>Model</th>
-                    <th>Clip machine</th>
-                    <th>Goal</th>
-                    <th>Rate</th>
-                    <th>Reality</th>
-                    <th>Defects</th>
-                    <th>Defects Quantity</th>
-                    <th>Downtime Reason</th>
-                    <th>Downtime Quantity</th>
-                    <th>Operations</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for contact in contacts %}
-                    <tr>
-                        <td>{{ contact.shift_date }}</td>
-                        <td>{{ contact.shift_hours }}</td>
-                        <td>{{ contact.model }}</td>
-                        <td>{{ contact.clip_machine }}</td>
-                        <td>{{ contact.goal }}</td>
-                        <td>{{ contact.rate }}</td>
-                        <td>{{ contact.reality }}</td>
-                        <td>{{ contact.defects }}</td>
-                        <td>{{ contact.defects_qty }}</td>
-                        <td>{{ contact.down_time_reason }}</td>
-                        <td>{{ contact.down_time_qty }}</td>
-                        <td>
-                            <a href="/edit/{{contact.id}}" class="btn btn-secondary">Edit</a>
-                            <a href="/delete/{{contact.id}}" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+  </div>
+</div>
+
+{% endblock modal %}
+
+{% block content %}
+<!-- Page template header -->
+<div class="custom-header p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-4 fw-normal">Daily KPIs</h1>
+  <p class="fs-5 text-muted">{{ shift_date }}</p>
+  <p class="fs-5 text-muted">Review today's shift KPIs</p>
+</div>
+
+<!-- Collection of cards layed out in rows -->
+<div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
+
+  <!-- Line bar productivity -->
+  <div class="col">
+    <div class="card mb-3 rounded-3 shadow-sm">
+      <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">Productivity</h4>
+      </div>
+      <div class="card-body">
+        <canvas class="my-4 w-100" id="dailyProductivityLineChart" width="900" height="380"></canvas>              
+      </div>
     </div>
-</div> -->
+  </div>
 
-<!-- <script type="text/javascript">
-    $(function () {
-        $('#datetimepicker1').datetimepicker();
-    });
- </script> -->
+  <!-- Doughnut downtime  -->
+  <div class="col">
+    <div class="card mb-3 rounded-3 shadow-sm">
+      <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">Downtime by reason</h4>
+      </div>
+      <div class="card-body">
+        <canvas class="my-4 w-100" id="dailyDowntimeChart" width="900" height="380"></canvas>              
+      </div>
+    </div>
+  </div>
 
+  <!-- Doughnut defects  -->
+  <div class="col">
+    <div class="card mb-3 rounded-3 shadow-sm">
+      <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">Defects by reason</h4>
+      </div>
+      <div class="card-body">
+        <canvas class="my-4 w-100" id="dailyDefectsChart" width="900" height="380"></canvas>              
+      </div>
+    </div>
+  </div>
 
-{% endblock %}
+</div>
+
+<!-- Data section -->
+<h2 class="display-6 text-center mb-4">Shift data</h2>
+
+<!-- Responsive data table -->
+<div class="table-responsive">
+  <table class="table text-center">
+    <thead>
+      <tr>
+        <th style="width: 2%;">Hour</th>
+        <th style="width: 8%;">Clip machine</th>
+        <th style="width: 8%;">Model</th>
+        <th style="width: 8%;">Goal</th>
+        <th style="width: 8%;">Rate</th>
+        <th style="width: 8%;">Reality</th>
+        <th style="width: 25%;">Defects</th>
+        <th style="width: 25%;">Downtime</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key, row in data.items() %}
+        <tr>
+          <th scope="row" class="text-start">{{ key }}</th>
+          <td>{{ row.clip_machine if row else '-' }}</td>
+          <td>{{ row.model if row else '-' }}</td>
+          <td>{{ row.goal if row else '-' }}</td>
+          <td>{{ row.rate if row else '-' }}</td>
+          <td>{{ row.reality if row else '-' }}</td>
+          {% if row %}
+            <td>{{ row.defects}} ({{ row.defects_qty }})</td>
+            <td>{{ row.down_time_reason}} ({{ row.down_time_qty }} mins)</td>
+          {% else %}
+            <td>-</td>
+            <td>-</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+<script>
+  graphDailyProductivity('dailyProductivityLineChart', {{ rate }}, {{ goal }}, {{ reality }});
+  graphDoughnut('dailyDowntimeChart', {{ downtime_labels |safe }}, {{ downtime_sum }}, {{ downtime_colors |safe }}, "Downtime by reason")
+  graphDoughnut('dailyDefectsChart', {{ defect_labels |safe }}, {{ defect_sum }}, {{ defect_colors |safe }}, "Defects by reason")
+</script>
+{% endblock content %}
