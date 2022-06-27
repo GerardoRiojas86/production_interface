@@ -2,9 +2,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-import json
 import datetime
-import pandas as pd 
 import werkzeug
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, jsonify
 from flask_cors import CORS

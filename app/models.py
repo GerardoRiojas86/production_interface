@@ -1,5 +1,4 @@
 import datetime
-from email.policy import default
 from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.types import Date, DateTime
 from .database import Base
