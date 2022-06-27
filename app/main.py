@@ -30,22 +30,11 @@ app.secret_key = 'mysecretkey'
 def index():
 
     shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
-    # shift_date_data = app.session.query(models.Contact).filter_by(shift_date=shift_date).order_by(models.Contact.shift_hours.asc()).all()
-    # shift_data_query= app.session.query(models.Contact).filter_by(shift_date=shift_date).order_by(models.Contact.shift_hours.asc()).statement
     
     shift_date_data = get_daily_shift_data(shift_date)
 
-    print(json.dumps(shift_date_data, indent=4))
+    # print(json.dumps(shift_date_data, indent=4))
 
-    # shift_data_df = pd.read_sql_query(
-    #   sql= shift_data_query,
-    #   con=engine)
-
-    # down_time_group_sum = shift_data_df.groupby('down_time_reason').sum()
-    # down_time_sum_labels = [val for val in down_time_group_sum.index.values]
-    # down_time_sum_qty = down_time_group_sum['down_time_qty'].tolist()
-
-    # print(list(shift_date_data['data'].values()))
     return render_template('index.html', 
                             shift_date=shift_date, 
                             data=shift_date_data['data'], 

@@ -111,8 +111,6 @@ class DayShift():
       defects_agg = day_shift_df[['defects', 'defects_qty']].groupby(['defects']).sum()
       defects_agg_dict = defects_agg.to_dict()['defects_qty']
 
-      print(generate_hex_colors(len(down_time_agg_dict)))
-
       return {
         "date": self.current_date.isoformat(),
         "hours": self.shift_hours,
