@@ -2,6 +2,7 @@
 from dotenv import load_dotenv
 load_dotenv()
 
+import json
 import datetime
 import werkzeug
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, jsonify
@@ -30,7 +31,7 @@ def index():
     
     shift_date_data = get_daily_shift_data(shift_date)
 
-    # print(json.dumps(shift_date_data, indent=4))
+    print(json.dumps(shift_date_data, indent=4))
 
     return render_template('index.html', 
                             shift_date=shift_date, 
