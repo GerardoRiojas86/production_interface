@@ -47,3 +47,5 @@ The following files are required to deploy the app in Heroku:
 * app/wsgi.py, flask app executor used in combination with gunicorn 
 
 
+
+
