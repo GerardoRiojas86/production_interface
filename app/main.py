@@ -100,6 +100,15 @@ def update_production(id):
       flash('Unknown production ID')
       return redirect(url_for('index'))
 
+@app.route('/delete_production/<string:id>', methods= ['DELETE'])
+def delete_production(id):
+    production = app.session.query(models.Production).filter_by(id=id).first()
+    app.session.delete(production)
+    app.session.commit()
+
+    flash('Production removed Successfully')
+    return redirect(url_for('index'))
+
 @app.route('/defect', methods = ['GET'])
 def get_defects():
     defect = app.session.query(models.Defect).all()
@@ -150,6 +159,15 @@ def update_defect(id):
       flash('Unknown defect ID')
       return redirect(url_for('index'))
 
+@app.route('/delete_defect/<string:id>', methods= ['DELETE'])
+def delete_defect(id):
+    defect = app.session.query(models.Defect).filter_by(id=id).first()
+    app.session.delete(defect)
+    app.session.commit()
+
+    flash('Defect removed Successfully')
+    return redirect(url_for('index'))
+
 @app.route('/downtime', methods = ['GET'])
 def get_downtime():
     downtime = app.session.query(models.DownTime).all()
@@ -198,6 +216,15 @@ def update_downtime(id):
     else:
       flash('Unknown downtime ID')
       return redirect(url_for('index'))
+
+@app.route('/delete_downtime/<string:id>', methods= ['DELETE'])
+def delete_downtime(id):
+    downtime = app.session.query(models.DownTime).filter_by(id=id).first()
+    app.session.delete(downtime)
+    app.session.commit()
+
+    flash('Downtime removed Successfully')
+    return redirect(url_for('index'))
 
 @app.teardown_appcontext
 def remove_session(*args, **kwargs):
