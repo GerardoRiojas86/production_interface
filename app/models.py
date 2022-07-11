@@ -35,6 +35,11 @@ class Production(Base):
     created_at = Column(DateTime, default=datetime.datetime.now())
     updated_at = Column(DateTime, onupdate=datetime.datetime.now())
 
+    def to_dict(self):
+      dict= { c.name: getattr(self, c.name) for c in self.__table__.columns}
+      dict['shift_date']= dict['shift_date'].isoformat()
+
+      return dict
 class Defect(Base):
   __tablename__ ='defects'
 
@@ -49,7 +54,10 @@ class Defect(Base):
   created_at = Column(DateTime, default=datetime.datetime.now())
   updated_at = Column(DateTime, onupdate=datetime.datetime.now())
 
-
+  def to_dict(self):
+    dict= { c.name: getattr(self, c.name) for c in self.__table__.columns}
+    dict['shift_date']= dict['shift_date'].isoformat()
+    return dict
 class DownTime(Base):
   __tablename__ ='downtimes'
 
@@ -63,3 +71,8 @@ class DownTime(Base):
   quantity = Column(Integer)
   created_at = Column(DateTime, default=datetime.datetime.now())
   updated_at = Column(DateTime, onupdate=datetime.datetime.now())
+
+  def to_dict(self):
+    dict= { c.name: getattr(self, c.name) for c in self.__table__.columns}
+    dict['shift_date']= dict['shift_date'].isoformat()
+    return dict  
