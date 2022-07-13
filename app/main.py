@@ -11,7 +11,7 @@ from sqlalchemy.orm import scoped_session
 
 from . import models
 from .database import SessionLocal, engine
-from .contact_repository import get_daily_shift_data
+from .repositories.production import get_shift_data, production_exist
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -26,27 +26,31 @@ app.secret_key = 'mysecretkey'
 
 @app.route('/')
 def index():
-    return 'OK'
+  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+  current_project = 'Clip machine'
+  shift_data = get_shift_data(current_date, current_project)
 
-    # shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
-    
-    # shift_date_data = get_daily_shift_data(shift_date)
+  print(json.dumps(shift_data, indent=4))
 
-    # print(json.dumps(shift_date_data, indent=4))
+  return render_template('index.html', 
+                          shift_date=current_date,
+                          hours=shift_data['hours'],
+                          production=shift_data['production'],
+                          downtime_labels=list(shift_data['downtime'].keys()),
+                          downtime_sum=list(shift_data['downtime'].values()),
+                          downtime_colors=shift_data['colors'],
+                          defect_labels=list(shift_data['defects'].keys()),
+                          defect_sum=list(shift_data['defects'].values()),
+                          defect_colors=shift_data['colors'])
 
+@app.route('/report')
+def report():
+  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+  project = 'Clip machine'
 
-    # return render_template('index.html', 
-    #                         shift_date=shift_date, 
-    #                         data=shift_date_data['data'], 
-    #                         rate=list(shift_date_data['rates'].values()), 
-    #                         goal=list(shift_date_data['goals'].values()), 
-    #                         reality=list(shift_date_data['reality'].values()),
-    #                         downtime_labels=list(shift_date_data['downtime'].keys()),
-    #                         downtime_sum=list(shift_date_data['downtime'].values()),
-    #                         downtime_colors=shift_date_data['downtime_colors'],
-    #                         defect_labels=list(shift_date_data['defects'].keys()),
-    #                         defect_sum=list(shift_date_data['defects'].values()),
-    #                         defect_colors=shift_date_data['defect_colors'])
+  return render_template('input-shift-report.html', 
+                          shift_date=current_date,
+                          project=project)
 
 @app.route('/production', methods = ['GET'])
 def get_production():
@@ -60,14 +64,20 @@ def get_production():
 def add_production():
     
     if request.method == 'POST':
+
+      shift_date = datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date()
+
+      if production_exist(shift_date, request.form['shift_time']):
+        flash('Production report already exist!')
+        return redirect(url_for('report'))
+      
+      else:
         production = models.Production(
           project=request.form['project'],
-          shift_date=datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date(),
+          shift_date=shift_date,
           shift_time=request.form['shift_time'],
           machine=request.form['machine'],
           model=request.form['model'],
-          goal=request.form['goal'],
-          rate=request.form['rate'],
           quantity=request.form['quantity']
         )   
 
@@ -87,8 +97,6 @@ def update_production(id):
       if ('shift_time' in request.form.keys()): production.shift_time=request.form['shift_time']
       if ('model' in request.form.keys()): production.model=request.form['model']
       if ('machine' in request.form.keys()): production.machine=request.form['machine']
-      if ('goal' in request.form.keys()): production.goal=request.form['goal']
-      if ('rate' in request.form.keys()): production.rate=request.form['rate']
       if ('quantity' in request.form.keys()): production.quantity=request.form['quantity']
 
       app.session.add(production)
