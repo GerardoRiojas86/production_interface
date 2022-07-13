@@ -30,7 +30,7 @@ def index():
   current_project = 'Clip machine'
   shift_data = get_shift_data(current_date, current_project)
 
-  print(json.dumps(shift_data, indent=4))
+  # print(json.dumps(shift_data, indent=4))
 
   return render_template('index.html', 
                           shift_date=current_date,
@@ -50,7 +50,6 @@ def report():
                           shift_date=current_date,
                           project=project)
 
-
 @app.route('/data')
 def data():
 
@@ -65,8 +64,6 @@ def data():
                           shift_date=current_date,
                           project=project,
                           data=shift_data['data'])
-
-
 
 @app.route('/production', methods = ['GET'])
 def get_production():
@@ -84,7 +81,7 @@ def add_production():
       shift_date = datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date()
 
       if production_exist(shift_date, request.form['shift_time']):
-        flash('Production report already exist!')
+        flash('Production report already exist!', 'error')
         return redirect(url_for('report'))
       
       else:
@@ -99,8 +96,8 @@ def add_production():
 
         app.session.add(production)
         app.session.commit()
-        flash('Production added successfully')
-        return redirect(url_for('index'))
+        flash('Production added successfully', 'success')
+        return redirect(url_for('report'))
 
 @app.route('/update_production/<id>', methods = ['PATCH'])
 def update_production(id):
@@ -157,8 +154,8 @@ def add_defect():
 
       app.session.add(defect)
       app.session.commit()
-      flash('Defect added successfully')
-      return redirect(url_for('index'))
+      flash('Defect added successfully', 'success')
+      return redirect(url_for('report'))
 
 @app.route('/update_defect/<id>', methods = ['PATCH'])
 def update_defect(id):
@@ -216,8 +213,8 @@ def add_downtime():
 
         app.session.add(downtime)
         app.session.commit()
-        flash('Downtime added successfully')
-        return redirect(url_for('index'))
+        flash('Downtime added successfully', 'success')
+        return redirect(url_for('report'))
 
 @app.route('/update_downtime/<id>', methods = ['PATCH'])
 def update_downtime(id):
