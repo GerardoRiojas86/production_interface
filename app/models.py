@@ -4,27 +4,6 @@ from sqlalchemy.types import Date, DateTime
 from sqlalchemy.orm import relationship
 from .database import Base
 
-class Projects(Base):
-  __tablename__ = 'projects'
-
-  id = Column(Integer, primary_key=True, index=True)
-  name = Column(String(254))
-  plant = Column(String(254))
-  models = relationship('Model', backref='projects', lazy='select')
-  
-  def to_dict(self):
-    return { c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-class Model(Base):
-  __tablename__ = 'models'
-
-  id = Column(Integer, primary_key=True, index=True)
-  name = Column(String(254))
-  description = Column(String(254))
-  project_id = Column(Integer, ForeignKey('projects.id'))
-
-  def to_dict(self):
-    return { c.name: getattr(self, c.name) for c in self.__table__.columns}
 class Production(Base):
     __tablename__ = 'productions'
     
