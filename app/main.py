@@ -13,7 +13,7 @@ from . import models
 from .database import SessionLocal, engine
 from .repositories.production import get_shift_data, production_exist
 
-models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=engine, checkfirst=True)
 
 app = Flask(__name__)
 
