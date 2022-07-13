@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Page template header -->
+<div class="custom-header p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-4 fw-normal">Shift data</h1>
+  <p class="fs-5 text-muted">{{ shift_date }}</p>
+</div>
+
+<!-- Collection of cards layed out in rows -->
+<div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
+
+  <!-- Tabs -->
+  <div class="col">
+
+    <!-- Responsive data table -->
+    <div class="table-responsive">
+      <table class="table text-center">
+        <thead>
+          <tr>
+            <th style="width: 2%;">Time</th>
+            <th style="width: 8%;">Produced</th>
+            <th style="width: 25%;">Defects</th>
+            <th style="width: 25%;">Downtime</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key, row in data.items() %}
+            <tr>
+              <th scope="row" class="text-start">{{ key }}</th>
+              {% if row %}
+                <td>{{ row.reality }} <small>pcs</small></td>
+                <td>{{ row.defects }} <small>pcs</small></td>
+                <td>{{ row.downtime }} <small>mins</small></td>
+              {% else %}
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+<script>
+</script>
+{% endblock content %}

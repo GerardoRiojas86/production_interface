@@ -185,6 +185,16 @@ def get_shift_data(shift_date, project):
   daily_production_data = get_hourly_production_data(shift_date, project)
   daily_defect_data = get_hourly_defect_data(shift_date, project)
   daily_downtime_data = get_hourly_downtime_data(shift_date, project)
+  data = {}
+
+  for index in range(len(SHIFT_HOURS)):
+    hour = SHIFT_HOURS[index]
+    
+    data[hour] = {
+      "reality": daily_production_data['reality']['data'][index],
+      "defects": daily_defect_data['data'][index],
+      "downtime": daily_downtime_data['data'][index]
+    }
 
   return {
     "date": shift_date,
@@ -193,5 +203,5 @@ def get_shift_data(shift_date, project):
     "defects": daily_defect_data,
     "downtimes": daily_downtime_data,
     "colors": generate_hex_colors(len(SHIFT_HOURS)),
-    "data": {}
+    "data": data
   }

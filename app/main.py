@@ -53,12 +53,18 @@ def report():
 
 @app.route('/data')
 def data():
+
+  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+  current_project = 'Clip machine'
+  shift_data = get_shift_data(current_date, current_project)
+  
   current_date = datetime.datetime.today().strftime('%Y-%m-%d')
   project = 'Clip machine'
 
   return render_template('shift-data.html', 
                           shift_date=current_date,
-                          project=project)
+                          project=project,
+                          data=shift_data['data'])
 
 
 
