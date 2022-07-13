@@ -35,13 +35,11 @@ def index():
   return render_template('index.html', 
                           shift_date=current_date,
                           hours=shift_data['hours'],
+                          colors=shift_data['colors'],
                           production=shift_data['production'],
-                          downtime_labels=list(shift_data['downtime'].keys()),
-                          downtime_sum=list(shift_data['downtime'].values()),
-                          downtime_colors=shift_data['colors'],
-                          defect_labels=list(shift_data['defects'].keys()),
-                          defect_sum=list(shift_data['defects'].values()),
-                          defect_colors=shift_data['colors'])
+                          downtimes=shift_data['downtimes'],
+                          defects=shift_data['defects']
+                        )
 
 @app.route('/report')
 def report():
@@ -51,6 +49,18 @@ def report():
   return render_template('input-shift-report.html', 
                           shift_date=current_date,
                           project=project)
+
+
+@app.route('/data')
+def data():
+  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+  project = 'Clip machine'
+
+  return render_template('shift-data.html', 
+                          shift_date=current_date,
+                          project=project)
+
+
 
 @app.route('/production', methods = ['GET'])
 def get_production():

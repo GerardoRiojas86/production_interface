@@ -55,7 +55,7 @@
 
 <script>
   graphProductionTimeline('dailyProductivityLineChart', {{ production['rate'] |safe  }}, {{ production['goal'] |safe }}, {{ production['reality'] |safe }}, {{ hours |safe}})
-  graphDoughnut('dailyDowntimeChart', {{ downtime_labels |safe }}, {{ downtime_sum }}, {{ downtime_colors |safe }}, "Downtime by reason")
-  graphDoughnut('dailyDefectsChart', {{ defect_labels |safe }}, {{ defect_sum }}, {{ defect_colors |safe }}, "Defects by reason")
+  graphDoughnut('dailyDowntimeChart', {{ downtimes['groups']['labels'] |safe }}, {{ downtimes['groups']['values'] }}, {{ downtimes['groups']['colors'] |safe }}, "Downtime by reason")
+  graphDoughnut('dailyDefectsChart', {{ defects['groups']['labels'] |safe }}, {{ defects['groups']['values'] }}, {{ defects['groups']['colors'] |safe }}, "Defects by reason")
 </script>
 {% endblock content %}

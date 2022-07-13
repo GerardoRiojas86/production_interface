@@ -123,18 +123,25 @@ def get_hourly_defect_data(date, project):
   else:
     defects_reasons_dict = defects_reasons_df.to_dict()['quantity']
 
-  # defect_resample = defect_df.resample('H', on='timestamp').quantity.sum()  
+  defect_resample = defect_df.resample('H', on='timestamp').quantity.sum()  
 
-  # defect_hourly_df = defect_resample.to_frame().reset_index()
-  # defect_hourly_df['timestamp'] = defect_hourly_df['timestamp'].dt.strftime('%-H:%M')
+  defect_hourly_df = defect_resample.to_frame().reset_index()
+  defect_hourly_df['timestamp'] = defect_hourly_df['timestamp'].dt.strftime('%-H:%M')
 
-  # defect_hourly_data = {}
+  defect_hourly_data = {}
 
-  # for hour in SHIFT_HOURS:
-  #   res = defect_hourly_df.loc[ defect_hourly_df['timestamp'] == hour ]
-  #   defect_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
+  for hour in SHIFT_HOURS:
+    res = defect_hourly_df.loc[ defect_hourly_df['timestamp'] == hour ]
+    defect_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
 
-  return defects_reasons_dict
+  return {
+    "groups": {
+      "colors": generate_hex_colors(len(defects_reasons_dict)),
+      "labels": list(defects_reasons_dict.keys()),
+      "values": list(defects_reasons_dict.values())
+    },
+    "data": list(defect_hourly_data.values())
+  }
 
 def get_hourly_downtime_data(date, project): 
   downtime_query = Query(
@@ -154,18 +161,25 @@ def get_hourly_downtime_data(date, project):
   else:
     downtime_reasons_dict = downtime_reasons_df.to_dict()['quantity']
 
-  # downtime_resample = downtime_df.resample('H', on='timestamp').quantity.sum()  
+  downtime_resample = downtime_df.resample('H', on='timestamp').quantity.sum()  
 
-  # downtime_hourly_df = downtime_resample.to_frame().reset_index()
-  # downtime_hourly_df['timestamp'] = downtime_hourly_df['timestamp'].dt.strftime('%-H:%M')
+  downtime_hourly_df = downtime_resample.to_frame().reset_index()
+  downtime_hourly_df['timestamp'] = downtime_hourly_df['timestamp'].dt.strftime('%-H:%M')
 
-  # downtime_hourly_data = {}
+  downtime_hourly_data = {}
 
-  # for hour in SHIFT_HOURS:
-  #   res = downtime_hourly_df.loc[ downtime_hourly_df['timestamp'] == hour ]
-  #   downtime_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
+  for hour in SHIFT_HOURS:
+    res = downtime_hourly_df.loc[ downtime_hourly_df['timestamp'] == hour ]
+    downtime_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
 
-  return downtime_reasons_dict
+  return {
+    "groups": {
+      "colors": generate_hex_colors(len(downtime_reasons_dict)),
+      "labels": list(downtime_reasons_dict.keys()),
+      "values": list(downtime_reasons_dict.values())
+    },
+    "data": list(downtime_hourly_data.values())
+  }
 
 def get_shift_data(shift_date, project):
   daily_production_data = get_hourly_production_data(shift_date, project)
@@ -177,7 +191,7 @@ def get_shift_data(shift_date, project):
     "hours": SHIFT_HOURS,
     "production": daily_production_data,
     "defects": daily_defect_data,
-    "downtime": daily_downtime_data,
+    "downtimes": daily_downtime_data,
     "colors": generate_hex_colors(len(SHIFT_HOURS)),
     "data": {}
   }
