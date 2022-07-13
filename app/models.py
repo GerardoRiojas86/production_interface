@@ -11,6 +11,9 @@ class Projects(Base):
   name = Column(String(254))
   plant = Column(String(254))
   models = relationship('Model', backref='projects', lazy='select')
+  
+  def to_dict(self):
+    return { c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class Model(Base):
   __tablename__ = 'models'
@@ -20,6 +23,8 @@ class Model(Base):
   description = Column(String(254))
   project_id = Column(Integer, ForeignKey('projects.id'))
 
+  def to_dict(self):
+    return { c.name: getattr(self, c.name) for c in self.__table__.columns}
 class Production(Base):
     __tablename__ = 'productions'
     
@@ -29,8 +34,6 @@ class Production(Base):
     model = Column(String(254)) # Model of the piece produced by clip_machine
     shift_date = Column(Date) # Date of the shift recorded YYYY-mm-dd
     shift_time = Column(Integer) # Hours in which the shift lasted
-    goal = Column(Integer, default=0) # Expected number of pieces to  be produced during the shift
-    rate = Column(Integer, default=0) # Rate of pieces the machine can produce
     quantity = Column(Integer, default=0) # Actual number of pieces produced during the shift
     created_at = Column(DateTime, default=datetime.datetime.now())
     updated_at = Column(DateTime, onupdate=datetime.datetime.now())
