@@ -1,22 +1,81 @@
 import datetime
-from sqlalchemy import Column, Float, Integer, String
+from sqlalchemy import Column, Float, ForeignKey, Integer, String
 from sqlalchemy.types import Date, DateTime
+from sqlalchemy.orm import relationship
 from .database import Base
 
-class Contact(Base):
-    __tablename__ = 'contacts'
+class Projects(Base):
+  __tablename__ = 'projects'
 
+  id = Column(Integer, primary_key=True, index=True)
+  name = Column(String(254))
+  plant = Column(String(254))
+  models = relationship('Model', backref='projects', lazy='select')
+  
+  def to_dict(self):
+    return { c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class Model(Base):
+  __tablename__ = 'models'
+
+  id = Column(Integer, primary_key=True, index=True)
+  name = Column(String(254))
+  description = Column(String(254))
+  project_id = Column(Integer, ForeignKey('projects.id'))
+
+  def to_dict(self):
+    return { c.name: getattr(self, c.name) for c in self.__table__.columns}
+class Production(Base):
+    __tablename__ = 'productions'
+    
     id = Column(Integer, primary_key=True, index=True)
-    shift_date = Column(Date) # Date of the shift recorded YYYY-mm-dd
-    shift_hours = Column(Integer) # Hours in which the shift lasted
-    clip_machine = Column(String(254)) # Machine producing pieces
+    project = Column(String(254))  
+    machine = Column(String(254)) # Machine producing pieces
     model = Column(String(254)) # Model of the piece produced by clip_machine
-    goal = Column(Integer, default=0) # Expected number of pieces to  be produced during the shift
-    rate = Column(Integer, default=0) # Rate of pieces the machine can produce
-    reality = Column(Integer, default=0) # Actual number of pieces produced during the shift
-    defects = Column(String(254)) # Defect root cause
-    defects_qty = Column(Integer, default=0) # Number of defected pieces 
-    down_time_reason = Column(String(254)) # Reason of downtime
-    down_time_qty = Column(Integer, default=0) # Minutes of no production 
+    shift_date = Column(Date) # Date of the shift recorded YYYY-mm-dd
+    shift_time = Column(Integer) # Hours in which the shift lasted
+    quantity = Column(Integer, default=0) # Actual number of pieces produced during the shift
     created_at = Column(DateTime, default=datetime.datetime.now())
     updated_at = Column(DateTime, onupdate=datetime.datetime.now())
+
+    def to_dict(self):
+      dict= { c.name: getattr(self, c.name) for c in self.__table__.columns}
+      dict['shift_date']= dict['shift_date'].isoformat()
+
+      return dict
+class Defect(Base):
+  __tablename__ ='defects'
+
+  id = Column(Integer, primary_key=True, index=True)
+  project = Column(String(254))
+  model = Column(String)
+  machine = Column(String)
+  shift_date = Column(Date)
+  shift_time = Column(Integer)
+  reason = Column(String(254))
+  quantity = Column(Integer)
+  created_at = Column(DateTime, default=datetime.datetime.now())
+  updated_at = Column(DateTime, onupdate=datetime.datetime.now())
+
+  def to_dict(self):
+    dict= { c.name: getattr(self, c.name) for c in self.__table__.columns}
+    dict['shift_date']= dict['shift_date'].isoformat()
+    return dict
+class DownTime(Base):
+  __tablename__ ='downtimes'
+
+  id = Column(Integer, primary_key=True, index=True)
+  project = Column(String(254))
+  model = Column(String)
+  machine = Column(String)
+  shift_date = Column(Date)
+  shift_time = Column(Integer)
+  reason = Column(String(254))
+  quantity = Column(Integer)
+  created_at = Column(DateTime, default=datetime.datetime.now())
+  updated_at = Column(DateTime, onupdate=datetime.datetime.now())
+
+  def to_dict(self):
+    dict= { c.name: getattr(self, c.name) for c in self.__table__.columns}
+    dict['shift_date']= dict['shift_date'].isoformat()
+    return dict  
