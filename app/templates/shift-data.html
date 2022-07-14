@@ -4,7 +4,19 @@
 <!-- Page template header -->
 <div class="custom-header p-3 pb-md-4 mx-auto text-center">
   <h1 class="display-4 fw-normal">Shift data</h1>
-  <p class="fs-5 text-muted">{{ shift_date }}</p>
+
+  <div class="card mb-3 rounded-3">
+    <div class="card-body">
+
+      <!-- Set date for data view form-->
+      <form action="/data" method="POST"> 
+        <div class="row input-group mb-3">
+          <input type="text" class="form-control" name='shift_date' id='inputShiftDate' placeholder="{{ shift_date }}" aria-label="{{ shift_date }}" aria-describedby="{{ shift_date }}" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
+          <button type="submit" class="btn btn-primary btn-block">Refresh</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Collection of cards layed out in rows -->

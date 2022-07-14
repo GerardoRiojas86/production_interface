@@ -1,4 +1,5 @@
 
+from email.policy import default
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -24,7 +25,7 @@ app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack)
 #settings
 app.secret_key = 'mysecretkey'
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
   current_date = datetime.datetime.today().strftime('%Y-%m-%d')
   current_project = 'Clip machine'
@@ -41,7 +42,7 @@ def index():
                           defects=shift_data['defects']
                         )
 
-@app.route('/report')
+@app.route('/report', methods=['GET'])
 def report():
   current_date = datetime.datetime.today().strftime('%Y-%m-%d')
   project = 'Clip machine'
@@ -50,18 +51,20 @@ def report():
                           shift_date=current_date,
                           project=project)
 
-@app.route('/data')
+@app.route('/data', methods=['GET', 'POST'])
 def data():
 
-  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
-  current_project = 'Clip machine'
-  shift_data = get_shift_data(current_date, current_project)
+  if request.method == 'POST': 
+    shift_date= request.form['shift_date']
   
-  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+  elif request.method == 'GET': 
+    shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
+
   project = 'Clip machine'
+  shift_data = get_shift_data(shift_date, project)
 
   return render_template('shift-data.html', 
-                          shift_date=current_date,
+                          shift_date=shift_date,
                           project=project,
                           data=shift_data['data'])
 
