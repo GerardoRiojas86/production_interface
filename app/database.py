@@ -1,18 +1,16 @@
 
 
 import os
-
-import sqlalchemy
+import logging
 from .utils import get_db_dynamic_url
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import logging
 
 
 if (os.getenv('FLASK_ENV') == 'production'):
   # Fetch postgres DB URL
-  SQLALCHEMY_DATABASE_URL = get_db_dynamic_url(os.getenv('HEROKU_APP_NAME', 'shiny-dandelion'))
+  SQLALCHEMY_DATABASE_URL = get_db_dynamic_url(os.getenv('HEROKU_APP_NAME'), os.getenv('HEROKU_API_KEY'))
   print(SQLALCHEMY_DATABASE_URL)
 
 else:
