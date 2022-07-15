@@ -3,7 +3,6 @@ from email.policy import default
 from dotenv import load_dotenv
 load_dotenv()
 
-import json
 import datetime
 import werkzeug
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, jsonify
