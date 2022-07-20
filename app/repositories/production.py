@@ -24,6 +24,12 @@ SHIFT_HOURS = [
         "19:00",
       ]
 
+  # TODO: Add a query to fetch machine details such as goal and rate
+  #       Use the machine details to set default values when there are no entries for
+  #       production records.
+MACHINE_DEFAULT_GOAL = 70
+MACHINE_DEFAULT_RATE = 70
+
 generate_hex_colors = lambda n: list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF),range(n)))
 
 class Query():
@@ -61,12 +67,6 @@ def get_hourly_production_data(date, project):
     query=current_app.session.query(models.Production).filter_by(shift_date=date, project=project).statement,
     conn=engine)
 
-  # TODO: Add a query to fetch machine details such as goal and rate
-  #       Use the machine details to set default values when there are no entries for
-  #       production records.
-  machine_default_goal = 200
-  machine_default_rate = 220
-
   production_df = production_query.__get_data_frame__()
   production_dict = production_df.to_dict('records')
 
@@ -82,8 +82,8 @@ def get_hourly_production_data(date, project):
     shift_hour_data = next((row for row in production_dict if row['shift_time'] == shift_hour), None)
 
     hourly_production_reality[shift_hour] = shift_hour_data['quantity'] if shift_hour_data else 0
-    hourly_production_goal[shift_hour] = machine_default_goal
-    hourly_production_rate[shift_hour] = machine_default_rate
+    hourly_production_goal[shift_hour] = MACHINE_DEFAULT_GOAL
+    hourly_production_rate[shift_hour] = MACHINE_DEFAULT_RATE
 
   return {
     "reality": {
