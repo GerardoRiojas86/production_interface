@@ -30,10 +30,23 @@ app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack)
 #settings
 app.secret_key = 'mysecretkey'
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-  current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+
+  if request.method == 'POST':
+    if request.form['shift_date']:
+      current_date = request.form['shift_date'] 
+    else:
+      current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+    
+    print('POST: current date is %s', current_date)
+
+  elif request.method == 'GET':
+    current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+    print('GET: current date is %s', current_date)
+
   current_project = 'Clip machine'
+  
   shift_data = get_shift_data(current_date, current_project)
 
   # print(json.dumps(shift_data, indent=4))
@@ -49,12 +62,14 @@ def index():
 
 @app.route('/report', methods=['GET'])
 def report():
+
   current_date = datetime.datetime.today().strftime('%Y-%m-%d')
   project = 'Clip machine'
 
   return render_template('input-shift-report.html', 
                           shift_date=current_date,
                           project=project)
+
 
 @app.route('/data', methods=['GET', 'POST'])
 def data():
