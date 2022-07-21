@@ -62,9 +62,9 @@ def production_exist(date, time):
   else:
     return False
 
-def get_hourly_production_data(date, project): 
+def get_hourly_production_data(date, project_id): 
   production_query = Query(
-    query=current_app.session.query(models.Production).filter_by(shift_date=date, project=project).statement,
+    query=current_app.session.query(models.Production).filter_by(shift_date=date, project_id=project_id).statement,
     conn=engine)
 
   production_df = production_query.__get_data_frame__()
@@ -105,9 +105,9 @@ def get_hourly_production_data(date, project):
     },
   }
 
-def get_hourly_defect_data(date, project): 
+def get_hourly_defect_data(date, project_id): 
   defect_query = Query(
-    query=current_app.session.query(models.Defect).filter_by(shift_date=date, project=project).statement,
+    query=current_app.session.query(models.Defect).filter_by(shift_date=date, project_id=project_id).statement,
     conn=engine)
 
   defect_df = defect_query.__get_data_frame__()
@@ -143,9 +143,9 @@ def get_hourly_defect_data(date, project):
     "data": list(defect_hourly_data.values())
   }
 
-def get_hourly_downtime_data(date, project): 
+def get_hourly_downtime_data(date, project_id): 
   downtime_query = Query(
-    query=current_app.session.query(models.DownTime).filter_by(shift_date=date, project=project).statement,
+    query=current_app.session.query(models.DownTime).filter_by(shift_date=date, project_id=project_id).statement,
     conn=engine)
 
   downtime_df = downtime_query.__get_data_frame__()
@@ -181,10 +181,10 @@ def get_hourly_downtime_data(date, project):
     "data": list(downtime_hourly_data.values())
   }
 
-def get_shift_data(shift_date, project):
-  daily_production_data = get_hourly_production_data(shift_date, project)
-  daily_defect_data = get_hourly_defect_data(shift_date, project)
-  daily_downtime_data = get_hourly_downtime_data(shift_date, project)
+def get_shift_data(shift_date, project_id):
+  daily_production_data = get_hourly_production_data(shift_date, project_id)
+  daily_defect_data = get_hourly_defect_data(shift_date, project_id)
+  daily_downtime_data = get_hourly_downtime_data(shift_date, project_id)
   data = {}
 
   for index in range(len(SHIFT_HOURS)):
