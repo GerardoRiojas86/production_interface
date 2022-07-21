@@ -1,5 +1,4 @@
 
-from email.policy import default
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -12,6 +11,7 @@ from sqlalchemy.orm import scoped_session
 from . import models
 from .database import SessionLocal, engine
 from .repositories.production import get_shift_data, production_exist
+from .repositories.project import get_projects
 
 
 try:
@@ -30,6 +30,14 @@ app.session = scoped_session(SessionLocal, scopefunc=_app_ctx_stack)
 #settings
 app.secret_key = 'mysecretkey'
 
+
+@app.route('/projects', methods=['GET'])
+def projects():
+  data = get_projects()
+  breakpoint()
+
+  return 'OK'
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
@@ -45,9 +53,9 @@ def index():
     current_date = datetime.datetime.today().strftime('%Y-%m-%d')
     print('GET: current date is %s', current_date)
 
-  current_project = 'Clip machine'
+  project_id = 1
   
-  shift_data = get_shift_data(current_date, current_project)
+  shift_data = get_shift_data(current_date, project_id)
 
   # print(json.dumps(shift_data, indent=4))
 
@@ -64,11 +72,11 @@ def index():
 def report():
 
   current_date = datetime.datetime.today().strftime('%Y-%m-%d')
-  project = 'Clip machine'
+  project_id = 1
 
   return render_template('input-shift-report.html', 
                           shift_date=current_date,
-                          project=project)
+                          project_id=project_id)
 
 
 @app.route('/data', methods=['GET', 'POST'])
@@ -80,12 +88,12 @@ def data():
   elif request.method == 'GET': 
     shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
 
-  project = 'Clip machine'
-  shift_data = get_shift_data(shift_date, project)
+  project_id = 1
+  shift_data = get_shift_data(shift_date, project_id)
 
   return render_template('shift-data.html', 
                           shift_date=shift_date,
-                          project=project,
+                          project_id=project_id,
                           data=shift_data['data'])
 
 @app.route('/production', methods = ['GET'])
@@ -109,7 +117,7 @@ def add_production():
       
       else:
         production = models.Production(
-          project=request.form['project'],
+          project_id=request.form['project_id'],
           shift_date=shift_date,
           shift_time=request.form['shift_time'],
           machine=request.form['machine'],
@@ -128,7 +136,7 @@ def update_production(id):
 
     if (request.method == 'PATCH' and production != None):
 
-      if ('project' in request.form.keys()): production.project=request.form['project'] 
+      if ('project_id' in request.form.keys()): production.project_id=request.form['project_id'] 
       if ('shift_date' in request.form.keys()): production.shift_date=datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date()
       if ('shift_time' in request.form.keys()): production.shift_time=request.form['shift_time']
       if ('model' in request.form.keys()): production.model=request.form['model']
@@ -166,7 +174,7 @@ def add_defect():
     
     if request.method == 'POST':
       defect = models.Defect(
-        project=request.form['project'],
+        project_id=request.form['project_id'],
         shift_date=datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date(),
         shift_time=request.form['shift_time'],
         machine=request.form['machine'],
@@ -186,7 +194,7 @@ def update_defect(id):
 
     if (request.method == 'PATCH' and defect != None):
 
-      if ('project' in request.form.keys()): defect.project=request.form['project'] 
+      if ('project_id' in request.form.keys()): defect.project_id=request.form['project_id'] 
       if ('shift_date' in request.form.keys()): defect.shift_date=datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date()
       if ('shift_time' in request.form.keys()): defect.shift_time=request.form['shift_time']
       if ('model' in request.form.keys()): defect.model=request.form['model']
@@ -225,7 +233,7 @@ def add_downtime():
     
     if request.method == 'POST':
         downtime = models.DownTime(
-          project=request.form['project'],
+          project_id=request.form['project_id'],
           shift_date=datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date(),
           shift_time=request.form['shift_time'],
           machine=request.form['machine'],
@@ -244,7 +252,7 @@ def update_downtime(id):
     downtime = app.session.query(models.DownTime).filter_by(id=id).first()
 
     if (request.method == 'PATCH' and downtime != None):
-      if ('project' in request.form.keys()): downtime.project=request.form['project'] 
+      if ('project_id' in request.form.keys()): downtime.project_id=request.form['project_id'] 
       if ('shift_date' in request.form.keys()): downtime.shift_date=datetime.datetime.strptime(request.form['shift_date'],'%Y-%m-%d').date()
       if ('shift_time' in request.form.keys()): downtime.shift_time=request.form['shift_time']
       if ('model' in request.form.keys()): downtime.model=request.form['model']
