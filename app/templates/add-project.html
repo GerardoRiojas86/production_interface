@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Breadcrumb path section-->
+<br>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Projects</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Add project</li>
+  </ol>
+</nav>
+<hr>
+
+<!-- Collection of cards layed out in rows -->
+<div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
+
+  <!-- Tabs -->
+  <div class="col">
+
+    <!-- Tab navigation -->
+    <nav>
+      <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-project-details-tab" data-bs-toggle="tab" data-bs-target="#nav-project-details" type="button" role="tab" aria-controls="nav-project-details" aria-selected="true">Project</button> 
+        <button class="nav-link" id="nav-project-models-tab" data-bs-toggle="tab" data-bs-target="#nav-models" type="button" role="tab" aria-controls="nav-models" aria-selected="false">Models</button> 
+        <button class="nav-link" id="nav-project-machines-tab" data-bs-toggle="tab" data-bs-target="#nav-machines" type="button" role="tab" aria-controls="nav-machines" aria-selected="false">Machines</button> 
+        <button class="nav-link" id="nav-project-defect-reasons-tab" data-bs-toggle="tab" data-bs-target="#nav-defect-reasons" type="button" role="tab" aria-controls="nav-defect-reasons" aria-selected="false">Defect reasons</button> 
+        <button class="nav-link" id="nav-project-downtime-reasons-tab" data-bs-toggle="tab" data-bs-target="#nav-downtime-reasons" type="button" role="tab" aria-controls="nav-downtime-reasons" aria-selected="false">Downtime reasons</button> 
+      </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tab-content">
+
+      <!-- Project details tab -->
+      <div class="tab-pane fade show active" id="nav-project-details" role="tabpanel" aria-labelledby="nav-project-details-tab">
+        <br>
+
+        <div class="card mb-3 rounded-3 shadow-sm">
+          <div class="card-body">
+
+            <!-- Production input form-->
+            <form action="/project/add" method="POST"> 
+              <div class="row mb-3">
+                <label for="inputProjectName" class="col-sm-3 col-form-label">Name</label>
+                <div class="col-sm-9">
+                    <input type="text" id="inputProjectName" name="project_name" class="form-control">
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjectGoal" class="col-sm-3 col-form-label">Goal</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputProjectGoal" name="project_goal" class="form-control">
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjectRate" class="col-sm-3 col-form-label">Rate</label>
+                <div class="col-sm-9">
+                    <input type="number" id="inputProjectRate" name="project_rate" class="form-control">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">Save</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      
+      <!-- Models tab -->
+      <div class="tab-pane fade" id="nav-models" role="tabpanel" aria-labelledby="nav-project-models-tab">
+        <br>
+        
+        <div class="card mb-3 rounded-3 shadow-sm">
+          <div class="card-body">
+
+            <!-- Models input form-->
+            <form action="/project/add/model" method="POST">
+
+              <div class="row mb-3">
+                <label for="inputProjects" class="col-sm-3 col-form-label">Project</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputProjects" name="project_id" aria-label="Select the project">
+                        <option selected>Choose the project</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputModelName" class="col-sm-3 col-form-label">Name</label>
+                <div class="col-sm-9">
+                    <input type="text" id="inputModelName" name="model_name" class="form-control">
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary btn-block">Save</button>
+            </form>
+          </div>
+        </div>
+
+      </div> 
+      
+      <!-- Machines tab -->
+      <div class="tab-pane fade" id="nav-machines" role="tabpanel" aria-labelledby="nav-project-machines-tab">
+        <br>
+        
+        <div class="card mb-3 rounded-3 shadow-sm">
+          <div class="card-body">
+            <!-- Machines input form-->
+            <form action="/project/add/machine" method="POST">
+
+              <div class="row mb-3">
+                <label for="inputProjects" class="col-sm-3 col-form-label">Project</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputProjects" name="project_id" aria-label="Select the project">
+                        <option selected>Choose the project</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjectMachine" class="col-sm-3 col-form-label">Name</label>
+                <div class="col-sm-9">
+                    <input type="text" id="inputProjectMachine" name="machine_name" class="form-control">
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary btn-block">Save</button>
+            </form>
+          </div>
+        </div>
+        
+      </div>   
+
+      <!-- Defect reasons tab -->
+      <div class="tab-pane fade" id="nav-defect-reasons" role="tabpanel" aria-labelledby="nav-project-defect-reasons-tab">
+        <br>
+        
+        <div class="card mb-3 rounded-3 shadow-sm">
+          <div class="card-body">
+            <!-- Defect reason input form-->
+            <form action="/project/add/reason" method="POST">
+
+              <div class="row mb-3" hidden>
+                <label for="inputReasonCategory" class="col-sm-3 col-form-label">Reason category</label>
+                <div class="col-sm-9">
+                  <input type='text' id="inputReasonCategory" name="category" class="form-control" value="defect" readonly>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjects" class="col-sm-3 col-form-label">Project</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputProjects" name="project_id" aria-label="Select the project">
+                        <option selected>Choose the project</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjectReasonDesc" class="col-sm-3 col-form-label">Description</label>
+                <div class="col-sm-9">
+                    <input type="text" id="inputProjectReasonDesc" name="description" class="form-control">
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary btn-block">Save</button>
+            </form>
+          </div>
+        </div>
+        
+      </div>   
+
+      <!-- Downtime reasons tab -->
+      <div class="tab-pane fade" id="nav-downtime-reasons" role="tabpanel" aria-labelledby="nav-project-downtime-reasons-tab">
+        <br>
+        
+        <div class="card mb-3 rounded-3 shadow-sm">
+          <div class="card-body">
+            <!-- Downtime reason input form-->
+            <form action="/project/add/reason" method="POST">
+
+              <div class="row mb-3" hidden>
+                <label for="inputReasonCategory" class="col-sm-3 col-form-label">Reason category</label>
+                <div class="col-sm-9">
+                  <input type='text' id="inputReasonCategory" name="category" class="form-control" value="downtime" readonly>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjects" class="col-sm-3 col-form-label">Project</label>
+                <div class="col-sm-9">
+                    <select class="form-select" id="inputProjects" name="project_id" aria-label="Select the project">
+                        <option selected>Choose the project</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <label for="inputProjectReasonDesc" class="col-sm-3 col-form-label">Description</label>
+                <div class="col-sm-9">
+                    <input type="text" id="inputProjectReasonDesc" name="description" class="form-control">
+                </div>
+              </div>
+              
+              <button type="submit" class="btn btn-primary btn-block">Save</button>
+            </form>
+          </div>
+        </div>
+        
+      </div>  
+
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+<script>
+</script>
+{% endblock content %}
