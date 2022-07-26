@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<!-- Page template header -->
-<div class="custom-header p-3 pb-md-4 mx-auto text-center">
-  <h1 class="display-4 fw-normal">Clip machine shift report</h1>
-  <p class="fs-5 text-muted">{{ shift_date }}</p>
-</div>
+
+<!-- Breadcrumb navigation -->
+<br>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">Projects</a></li>
+    <li class="breadcrumb-item"><a href="/project/{{ project.id }}">{{ project.name }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Shift report</li>
+  </ol>
+</nav>
+<hr>
 
 <!-- Collection of cards layed out in rows -->
 <div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
@@ -36,7 +42,7 @@
               <div class="row mb-3" hidden>
                 <label for="inputProjectId" class="col-sm-3 col-form-label">Project ID</label>
                 <div class="col-sm-9">
-                  <input type='text' id="inputProjectId" name="project_id" class="form-control" value="{{ project_id }}" readonly>
+                  <input type='text' id="inputProjectId" name="project_id" class="form-control" value="{{ project.id }}" readonly>
                 </div>
               </div>
 
@@ -74,34 +80,21 @@
                   <div class="col-sm-9">
                       <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
                           <option selected>Choose the model</option>
-                          <option value="frt lh">frt lh</option>
-                          <option value="frt rh">frt rh</option>
-                          <option value="rr lh">rr lh</option>
-                          <option value="rr rh">rr rh</option>
-                          <option value="frt lh A">frt lh A</option>
-                          <option value="frt rh A">frt rh A</option>
-                          <option value="rr lh A">rr lh A</option>
-                          <option value="rr rh A">rr rh A</option>
-                          <option value="frt lh B">frt lh B</option>
-                          <option value="frt rh B">frt rh B</option>
-                          <option value="rr lh B">rr lh B</option>
-                          <option value="rr rh B">rr rh B</option>
+                          {% for model in project['models'] %}
+                            <option value="{{ model.name }}">{{ model.name }}</option>
+                          {% endfor %}
                       </select>                          
                   </div>
               </div>
             
               <div class="row mb-3">
-                  <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
+                  <label for="inputClipMachine" class="col-sm-3 col-form-label">Machine</label>
                   <div class="col-sm-9">
                       <select class="form-select" id="inputClipMachine" name="machine" aria-label="Select the machine">
                           <option selected>Choose the machine</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
+                          {% for machine in project['machines'] %}
+                            <option value="{{ machine.name }}">{{ machine.name }}</option>
+                          {% endfor %}
                       </select>                         
                   </div>
               </div>
@@ -132,7 +125,7 @@
               <div class="row mb-3" hidden>
                 <label for="inputProjectId" class="col-sm-3 col-form-label">Project ID</label>
                 <div class="col-sm-9">
-                  <input type='text' id="inputProjectId" name="project_id" class="form-control" value="{{ project_id }}" readonly>
+                  <input type='text' id="inputProjectId" name="project_id" class="form-control" value="{{ project.id }}" readonly>
                 </div>
               </div>
 
@@ -155,34 +148,21 @@
                   <div class="col-sm-9">
                       <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
                           <option selected>Choose the model</option>
-                          <option value="frt lh">frt lh</option>
-                          <option value="frt rh">frt rh</option>
-                          <option value="rr lh">rr lh</option>
-                          <option value="rr rh">rr rh</option>
-                          <option value="frt lh A">frt lh A</option>
-                          <option value="frt rh A">frt rh A</option>
-                          <option value="rr lh A">rr lh A</option>
-                          <option value="rr rh A">rr rh A</option>
-                          <option value="frt lh B">frt lh B</option>
-                          <option value="frt rh B">frt rh B</option>
-                          <option value="rr lh B">rr lh B</option>
-                          <option value="rr rh B">rr rh B</option>
+                          {% for model in project['models'] %}
+                            <option value="{{ model.name }}">{{ model.name }}</option>
+                          {% endfor %}
                       </select>                          
                   </div>
               </div>
             
               <div class="row mb-3">
-                  <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
+                  <label for="inputClipMachine" class="col-sm-3 col-form-label">Machine</label>
                   <div class="col-sm-9">
                       <select class="form-select" id="inputClipMachine" name="machine" aria-label="Select the machine">
                           <option selected>Choose the machine</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
+                          {% for machine in project['machines'] %}
+                            <option value="{{ machine.name }}">{{ machine.name }}</option>
+                          {% endfor %}
                       </select>                         
                   </div>
               </div>
@@ -192,18 +172,12 @@
                 <div class="col-sm-9">
                     <select id="inputDefectReason" name="reason" class="form-select" aria-label="Select the defect reason">
                         <option selected>Choose the defect reason</option>
-                        <option value="Long pieces">Long pieces</option>
-                        <option value="Short pieces">Short pieces</option>
-                        <option value="Blister">Blister</option>
-                        <option value="Air hole damage">Air hole damage</option>
-                        <option value="Dry hole damage">Dry hole damage</option>
-                        <option value="Misplaced clip">Misplaced clip</option>
-                        <option value="Lack of clip">Lack of clip</option>
-                        <option value="Wrong clip">Wrong clip</option>
-                        <option value="Bad coating">Bad coating</option>
-                        <option value="Damaged bulb">Damaged bulb</option>
-                        <option value="Bad drilling">Bad drilling</option>
-                        <option value="Bad insertion">Bad insertion</option>
+                        {% for reason in project['reasons'] %}
+                          {% if reason['category'] == 'defect' %}
+                            <option value="{{ reason['description'] }}">{{ reason['description'] }}</option>
+                          {% endif %}
+                        {% endfor %}
+
                     </select>
                 </div>
               </div>
@@ -233,7 +207,7 @@
               <div class="row mb-3" hidden>
                 <label for="inputProjectId" class="col-sm-3 col-form-label">Project</label>
                 <div class="col-sm-9">
-                  <input type='text' id="inputProjectId" name="project_id" class="form-control" value="{{ project_id }}" readonly>
+                  <input type='text' id="inputProjectId" name="project_id" class="form-control" value="{{ project.id }}" readonly>
                 </div>
               </div>
 
@@ -256,34 +230,21 @@
                   <div class="col-sm-9">
                       <select class="form-select" id="inputModel" name="model" aria-label="Select the model">
                           <option selected>Choose the model</option>
-                          <option value="frt lh">frt lh</option>
-                          <option value="frt rh">frt rh</option>
-                          <option value="rr lh">rr lh</option>
-                          <option value="rr rh">rr rh</option>
-                          <option value="frt lh A">frt lh A</option>
-                          <option value="frt rh A">frt rh A</option>
-                          <option value="rr lh A">rr lh A</option>
-                          <option value="rr rh A">rr rh A</option>
-                          <option value="frt lh B">frt lh B</option>
-                          <option value="frt rh B">frt rh B</option>
-                          <option value="rr lh B">rr lh B</option>
-                          <option value="rr rh B">rr rh B</option>
+                          {% for model in project['models'] %}
+                            <option value="{{ model.name }}">{{ model.name }}</option>
+                          {% endfor %}
                       </select>                          
                   </div>
               </div>
             
               <div class="row mb-3">
-                  <label for="inputClipMachine" class="col-sm-3 col-form-label">Clip machine</label>
+                  <label for="inputClipMachine" class="col-sm-3 col-form-label">Machine</label>
                   <div class="col-sm-9">
                       <select class="form-select" id="inputClipMachine" name="machine" aria-label="Select the machine">
                           <option selected>Choose the machine</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                          <option value="6">6</option>
-                          <option value="7">7</option>
-                          <option value="8">8</option>
-                          <option value="9">9</option>
+                          {% for machine in project['machines'] %}
+                            <option value="{{ machine.name }}">{{ machine.name }}</option>
+                          {% endfor %}
                       </select>                         
                   </div>
               </div>
@@ -293,21 +254,13 @@
                 <div class="col-sm-9">
                     <select id="inputDownTimeReason" name="reason" class="form-select" aria-label="Select the downtime reason">
                         <option selected>Choose the downtime reason</option>
-                        <option value="Machine cleaning">Machine cleaning</option>
-                        <option value="Lunch time">Lunch time</option>
-                        <option value="Break">Break</option>
-                        <option value="Change model">Change model</option>
-                        <option value="Boot machine">Boot machine</option>
-                        <option value="Machine failure">Machine failure</option>
-                        <option value="Lack of light">Lack of light</option>
-                        <option value="Setting parameters">Setting parameters</option>
-                        <option value="New staff">New staff</option>
-                        <option value="Lack of material">Lack of material</option>
-                        <option value="Off 10x">Off 10x</option>
-                        <option value="Poorly wound material">Poorly wound material</option>
-                        <option value="Rework of parts">Rework of parts</option>
-                        <option value="Upside down profile">Upside down profile</option>
-                        <option value="Change container">Change container</option>
+                        {% for reason in project['reasons'] %}
+                          {% if reason['category'] == 'downtime' %}
+                            <option value="{{ reason['description'] }}">{{ reason['description'] }}</option>
+                          {% endif %}
+                        {% endfor %}
+                        
+
                     </select>
                 </div>
               </div>
