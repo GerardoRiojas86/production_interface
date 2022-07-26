@@ -54,17 +54,17 @@ class Query():
     else:
       return None
 
-def production_exist(date, time):
-  res= current_app.session.query(models.Production).filter_by(shift_date=date, shift_time=time).first()
+def production_exist(date, time, project_id):
+  res= current_app.session.query(models.Production).filter_by(shift_date=date, shift_time=time, id=project_id).first()
 
   if res != None:
     return True
   else:
     return False
 
-def get_hourly_production_data(date, project): 
+def get_hourly_production_data(date, project_id, project_rate, project_goal): 
   production_query = Query(
-    query=current_app.session.query(models.Production).filter_by(shift_date=date, project=project).statement,
+    query=current_app.session.query(models.Production).filter_by(shift_date=date, project_id=project_id).statement,
     conn=engine)
 
   production_df = production_query.__get_data_frame__()
@@ -82,8 +82,8 @@ def get_hourly_production_data(date, project):
     shift_hour_data = next((row for row in production_dict if row['shift_time'] == shift_hour), None)
 
     hourly_production_reality[shift_hour] = shift_hour_data['quantity'] if shift_hour_data else 0
-    hourly_production_goal[shift_hour] = MACHINE_DEFAULT_GOAL
-    hourly_production_rate[shift_hour] = MACHINE_DEFAULT_RATE
+    hourly_production_goal[shift_hour] = project_goal
+    hourly_production_rate[shift_hour] = project_rate
 
   return {
     "reality": {
@@ -105,9 +105,9 @@ def get_hourly_production_data(date, project):
     },
   }
 
-def get_hourly_defect_data(date, project): 
+def get_hourly_defect_data(date, project_id): 
   defect_query = Query(
-    query=current_app.session.query(models.Defect).filter_by(shift_date=date, project=project).statement,
+    query=current_app.session.query(models.Defect).filter_by(shift_date=date, project_id=project_id).statement,
     conn=engine)
 
   defect_df = defect_query.__get_data_frame__()
@@ -143,9 +143,9 @@ def get_hourly_defect_data(date, project):
     "data": list(defect_hourly_data.values())
   }
 
-def get_hourly_downtime_data(date, project): 
+def get_hourly_downtime_data(date, project_id): 
   downtime_query = Query(
-    query=current_app.session.query(models.DownTime).filter_by(shift_date=date, project=project).statement,
+    query=current_app.session.query(models.DownTime).filter_by(shift_date=date, project_id=project_id).statement,
     conn=engine)
 
   downtime_df = downtime_query.__get_data_frame__()
@@ -181,10 +181,10 @@ def get_hourly_downtime_data(date, project):
     "data": list(downtime_hourly_data.values())
   }
 
-def get_shift_data(shift_date, project):
-  daily_production_data = get_hourly_production_data(shift_date, project)
-  daily_defect_data = get_hourly_defect_data(shift_date, project)
-  daily_downtime_data = get_hourly_downtime_data(shift_date, project)
+def get_shift_data(shift_date, project_id, project_rate, project_goal):
+  daily_production_data = get_hourly_production_data(shift_date, project_id, project_rate, project_goal)
+  daily_defect_data = get_hourly_defect_data(shift_date, project_id)
+  daily_downtime_data = get_hourly_downtime_data(shift_date, project_id)
   data = {}
 
   for index in range(len(SHIFT_HOURS)):

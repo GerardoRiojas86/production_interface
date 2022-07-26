@@ -3,24 +3,13 @@
 {% block content %}
 <!-- Page template header -->
 <div class="custom-header p-3 pb-md-4 mx-auto text-center">
-  <h1 class="display-4 fw-normal">Daily KPIs</h1>
-  <small class="">Review today's shift KPIs</small>
-  <br><br>
-
-  <!-- Date picker for shift date -->
-  <div class="card mb-0 border-0">
-    <div class="card-body">
-
-      <!-- Set date for data view form-->
-      <form action="/" method="POST"> 
-        <div class="row input-group mb-3">
-          <input type="text" class="form-control" name='shift_date' id='inputShiftDate' placeholder="{{ shift_date }}" aria-label="{{ shift_date }}" aria-describedby="{{ shift_date }}" data-provide="datepicker" data-date-format="yyyy-mm-dd" placeholder="Pick the date">
-          <button type="submit" class="btn btn-primary btn-block">Refresh</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Projects</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ project.name }}</li>
+    </ol>
+  </nav>
+  <hr>
 
 <!-- Collection of cards layed out in rows -->
 <div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
