@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Page template header -->
+<div class="custom-header p-3 pb-md-4 mx-auto text-center">
+  <h1 class="display-4 fw-normal">Projects</h1>
+
+</div>
+
+<!-- Collection of cards layed out in rows -->
+<div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
+
+  <!-- Tabs -->
+  <div class="col">
+
+    <!-- Responsive data table -->
+    <div class="table-responsive">
+      <table class="table table-hover text-center">
+        <thead>
+          <tr>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in projects %}
+            <tr data-url="/project/{{ project.id}}">
+              <th scope="row" class="text-start">{{ project.name }}</th>
+              <td><small>Rate {{ project.rate }}</small></td>
+              <td><small>Goal {{ project.goal }}</small></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+<script>
+  window.onload = function() {
+    $('table.table tr').click(function () {
+      window.location.href = $(this).data('url');
+    });
+  }
+</script>
+{% endblock content %}
