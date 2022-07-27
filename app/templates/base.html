@@ -90,7 +90,11 @@
 
               {% if project %}
                 <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/project/{{ project.id }}/report">Add shift report</a>
+                  <a class="nav-link active" aria-current="page" href="/project/{{ project.id }}/shift-input">Shift input</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/project/{{ project.id }}/report/daily">Daily shift report</a>
                 </li>
               {% endif %}
 
