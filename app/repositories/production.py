@@ -49,8 +49,8 @@ class Query():
 
 def production_exist(date, time, project_id):
   res= current_app.session.query(models.Production).filter_by(shift_date=date, shift_time=time, id=project_id).first()
-
-  if res != None:
+  
+  if res != None: 
     return True
   else:
     return False
