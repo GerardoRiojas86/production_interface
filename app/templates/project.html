@@ -45,8 +45,8 @@
     <br>
 
     <!-- Productivity card  -->
-    <div class="card-group">
-      <div class="card">
+    <div class="card-deck">
+      <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title display-4">{{ total['production']['reality'] }} <small>pc.</small></h5>
           <p class="card-text">Total amount of pieces produced today.</p>
@@ -58,7 +58,7 @@
       </div>
 
       <!-- Defects card -->
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title display-4">{{ total['defects'] }} <small>pc.</small></h5>
           <p class="card-text">Total amount of defects identified today.</p>
@@ -70,7 +70,7 @@
       </div>
 
       <!-- Downtimes card -->
-      <div class="card">
+      <div class="card mb-3">
         <div class="card-body">
           <h5 class="card-title display-4">{{ total['downtime'] }} <small>min.</small></h5>
           <p class="card-text">Total minutes of downtime occurred today.</p>
@@ -80,6 +80,7 @@
           <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
         </div>
       </div>
+
     </div>
     <br>    
   </div>
