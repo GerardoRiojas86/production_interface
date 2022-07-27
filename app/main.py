@@ -1,7 +1,9 @@
 
+
 from dotenv import load_dotenv
 load_dotenv()
 
+import json
 import datetime
 import werkzeug
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, jsonify
@@ -133,15 +135,19 @@ def show_project(id):
     current_date = datetime.datetime.today().strftime('%Y-%m-%d')
 
   shift_data = get_shift_data(current_date, project['id'], project['rate'], project['goal'])
+  
+  shift_readable_date = datetime.datetime.strptime(current_date, '%Y-%m-%d').strftime('%B %d, %Y')
 
   return render_template('project.html', 
                           project=project,
                           shift_date=current_date,
+                          shift_readable_date=shift_readable_date,
                           hours=shift_data['hours'],
                           colors=shift_data['colors'],
                           production=shift_data['production'],
                           downtimes=shift_data['downtimes'],
-                          defects=shift_data['defects']
+                          defects=shift_data['defects'],
+                          total=shift_data['total']
                         )
 
 @app.route('/project/<id>/shift-input', methods=['GET'])
@@ -168,10 +174,16 @@ def daily_report(id):
 
   shift_data = get_shift_data(shift_date, project['id'], project['rate'], project['goal'])
 
+  shift_readable_date = datetime.datetime.strptime(shift_date, '%Y-%m-%d').strftime('%B %d, %Y')
+
+  print(json.dumps(shift_data, indent=4))
+
   return render_template('daily-shift-report.html', 
                           shift_date=shift_date,
+                          shift_readable_date=shift_readable_date,
                           project=project,
-                          data=shift_data['data'])
+                          data=shift_data['data'],
+                          total=shift_data['total'])
 
 @app.route('/production', methods = ['GET'])
 def get_production():

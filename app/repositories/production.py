@@ -23,12 +23,6 @@ SHIFT_HOURS = [
         "18:00"
       ]
 
-  # TODO: Add a query to fetch machine details such as goal and rate
-  #       Use the machine details to set default values when there are no entries for
-  #       production records.
-MACHINE_DEFAULT_GOAL = 70
-MACHINE_DEFAULT_RATE = 70
-
 generate_hex_colors = lambda n: list(map(lambda i: "#" + "%06x" % random.randint(0, 0xFFFFFF),range(n)))
 
 class Query():
@@ -75,6 +69,9 @@ def get_hourly_production_data(date, project_id, project_rate, project_goal):
   hourly_production_rate = {}
   hourly_production_goal = {}
   hourly_production_reality = {}
+  daily_production_reality = 0
+  daily_production_goal = 0
+  daily_production_rate = 0
 
   for shift_hour in SHIFT_HOURS:
     
@@ -84,22 +81,29 @@ def get_hourly_production_data(date, project_id, project_rate, project_goal):
     hourly_production_goal[shift_hour] = project_goal
     hourly_production_rate[shift_hour] = project_rate
 
+    daily_production_reality += hourly_production_reality[shift_hour]
+    daily_production_goal += project_goal
+    daily_production_rate += project_rate
+
   return {
     "reality": {
       "label": "Reality",
       "color": "#CB1F39",
+      "total": daily_production_reality,
       "data": list(hourly_production_reality.values())
     },
 
     "rate": {
       "label": "Rate",
       "color": "#060001",
+      "total": daily_production_rate,
       "data": list(hourly_production_rate.values())
     },
 
     "goal": {
       "label": "Goal",
       "color": "#1FCB1F",
+      "total": daily_production_goal,
       "data": list(hourly_production_goal.values())
     },
   }
@@ -128,10 +132,12 @@ def get_hourly_defect_data(date, project_id):
   defect_hourly_df['timestamp'] = defect_hourly_df['timestamp'].dt.strftime('%-H:%M')
 
   defect_hourly_data = {}
+  daily_total_defects = 0
 
   for hour in SHIFT_HOURS:
     res = defect_hourly_df.loc[ defect_hourly_df['timestamp'] == hour ]
     defect_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
+    daily_total_defects += defect_hourly_data[hour]
 
   return {
     "groups": {
@@ -139,6 +145,7 @@ def get_hourly_defect_data(date, project_id):
       "labels": list(defects_reasons_dict.keys()),
       "values": list(defects_reasons_dict.values())
     },
+    "total": daily_total_defects,
     "data": list(defect_hourly_data.values())
   }
 
@@ -166,10 +173,12 @@ def get_hourly_downtime_data(date, project_id):
   downtime_hourly_df['timestamp'] = downtime_hourly_df['timestamp'].dt.strftime('%-H:%M')
 
   downtime_hourly_data = {}
+  daily_total_downtime = 0
 
   for hour in SHIFT_HOURS:
     res = downtime_hourly_df.loc[ downtime_hourly_df['timestamp'] == hour ]
     downtime_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
+    daily_total_downtime += downtime_hourly_data[hour]
 
   return {
     "groups": {
@@ -177,6 +186,7 @@ def get_hourly_downtime_data(date, project_id):
       "labels": list(downtime_reasons_dict.keys()),
       "values": list(downtime_reasons_dict.values())
     },
+    "total": daily_total_downtime,
     "data": list(downtime_hourly_data.values())
   }
 
@@ -202,5 +212,14 @@ def get_shift_data(shift_date, project_id, project_rate, project_goal):
     "defects": daily_defect_data,
     "downtimes": daily_downtime_data,
     "colors": generate_hex_colors(len(SHIFT_HOURS)),
+    "total": {
+      "production": {
+        "reality": daily_production_data['reality']['total'],
+        "rate": daily_production_data['rate']['total'],
+        "goal": daily_production_data['goal']['total']
+      },
+      "defects": daily_defect_data['total'],
+      "downtime": daily_downtime_data['total']
+    },
     "data": data
   }
