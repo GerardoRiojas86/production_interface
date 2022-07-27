@@ -144,7 +144,7 @@ def show_project(id):
                           defects=shift_data['defects']
                         )
 
-@app.route('/project/<id>/report', methods=['GET'])
+@app.route('/project/<id>/shift-input', methods=['GET'])
 def report(id):
 
   project = get_project_by_id(id)
@@ -155,8 +155,8 @@ def report(id):
                           shift_date=current_date,
                           project=project)
 
-@app.route('/data', methods=['GET', 'POST'])
-def data():
+@app.route('/project/<id>/report/daily', methods=['GET', 'POST'])
+def daily_report(id):
 
   if request.method == 'POST': 
     shift_date= request.form['shift_date']
@@ -164,12 +164,13 @@ def data():
   elif request.method == 'GET': 
     shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
 
-  project_id = 1
-  shift_data = get_shift_data(shift_date, project_id)
+  project = get_project_by_id(id)
 
-  return render_template('shift-data.html', 
+  shift_data = get_shift_data(shift_date, project['id'], project['rate'], project['goal'])
+
+  return render_template('daily-shift-report.html', 
                           shift_date=shift_date,
-                          project_id=project_id,
+                          project=project,
                           data=shift_data['data'])
 
 @app.route('/production', methods = ['GET'])
