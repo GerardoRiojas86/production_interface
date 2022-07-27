@@ -1,7 +1,9 @@
 
+
 from dotenv import load_dotenv
 load_dotenv()
 
+import json
 import datetime
 import werkzeug
 from flask import Flask, _app_ctx_stack, render_template, request, redirect, url_for, flash, jsonify
@@ -133,26 +135,33 @@ def show_project(id):
     current_date = datetime.datetime.today().strftime('%Y-%m-%d')
 
   shift_data = get_shift_data(current_date, project['id'], project['rate'], project['goal'])
+  
+  shift_readable_date = datetime.datetime.strptime(current_date, '%Y-%m-%d').strftime('%B %d, %Y')
 
   return render_template('project.html', 
                           project=project,
                           shift_date=current_date,
+                          shift_readable_date=shift_readable_date,
                           hours=shift_data['hours'],
                           colors=shift_data['colors'],
                           production=shift_data['production'],
                           downtimes=shift_data['downtimes'],
-                          defects=shift_data['defects']
+                          defects=shift_data['defects'],
+                          total=shift_data['total']
                         )
 
 @app.route('/project/<id>/shift-input', methods=['GET'])
-def report(id):
+def shift_input(id):
 
   project = get_project_by_id(id)
+
   current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+  current_date_readable = datetime.datetime.today().strftime('%B %d, %Y')
   
 
-  return render_template('input-shift-report.html', 
+  return render_template('shift-input.html', 
                           shift_date=current_date,
+                          shift_readable_date=current_date_readable,
                           project=project)
 
 @app.route('/project/<id>/report/daily', methods=['GET', 'POST'])
@@ -168,10 +177,16 @@ def daily_report(id):
 
   shift_data = get_shift_data(shift_date, project['id'], project['rate'], project['goal'])
 
+  shift_readable_date = datetime.datetime.strptime(shift_date, '%Y-%m-%d').strftime('%B %d, %Y')
+
+  print(json.dumps(shift_data, indent=4))
+
   return render_template('daily-shift-report.html', 
                           shift_date=shift_date,
+                          shift_readable_date=shift_readable_date,
                           project=project,
-                          data=shift_data['data'])
+                          data=shift_data['data'],
+                          total=shift_data['total'])
 
 @app.route('/production', methods = ['GET'])
 def get_production():
@@ -190,7 +205,7 @@ def add_production():
 
       if production_exist(shift_date, request.form['shift_time'], request.form['project_id']):
         flash('Production report already exist!', 'error')
-        return redirect(url_for('report', id=request.form['project_id']))
+        return redirect(url_for('shift_input', id=request.form['project_id']))
       
       else:
         production = models.Production(
@@ -205,7 +220,7 @@ def add_production():
         app.session.add(production)
         app.session.commit()
         flash('Production added successfully', 'success')
-        return redirect(url_for('report', id=request.form['project_id']))
+        return redirect(url_for('shift_input', id=request.form['project_id']))
 
 @app.route('/update_production/<id>', methods = ['PATCH'])
 def update_production(id):
@@ -263,7 +278,7 @@ def add_defect():
       app.session.add(defect)
       app.session.commit()
       flash('Defect added successfully', 'success')
-      return redirect(url_for('report', id=request.form['project_id']))
+      return redirect(url_for('shift_input', id=request.form['project_id']))
 
 @app.route('/update_defect/<id>', methods = ['PATCH'])
 def update_defect(id):
@@ -283,7 +298,7 @@ def update_defect(id):
       app.session.commit()
 
       flash('Defect updated Successfully')
-      return redirect(url_for('report', id=request.form['project_id']))
+      return redirect(url_for('shift_input', id=request.form['project_id']))
     else:
       flash('Unknown defect ID')
       return redirect(url_for('index'))
@@ -295,7 +310,7 @@ def delete_defect(id):
     app.session.commit()
 
     flash('Defect removed Successfully')
-    return redirect(url_for('report', id=request.form['project_id']))
+    return redirect(url_for('shift_input', id=request.form['project_id']))
 
 @app.route('/downtimes', methods = ['GET'])
 def get_downtime():
@@ -322,7 +337,7 @@ def add_downtime():
         app.session.add(downtime)
         app.session.commit()
         flash('Downtime added successfully', 'success')
-        return redirect(url_for('report', id=request.form['project_id']))
+        return redirect(url_for('shift_input', id=request.form['project_id']))
 
 @app.route('/update_downtime/<id>', methods = ['PATCH'])
 def update_downtime(id):
@@ -344,7 +359,7 @@ def update_downtime(id):
       return redirect(url_for('index', id=request.form['project_id']))
     else:
       flash('Unknown downtime ID')
-      return redirect(url_for('report', id=request.form['project_id']))
+      return redirect(url_for('shift_input', id=request.form['project_id']))
 
 @app.route('/delete_downtime/<string:id>', methods= ['DELETE'])
 def delete_downtime(id):
@@ -353,7 +368,7 @@ def delete_downtime(id):
     app.session.commit()
 
     flash('Downtime removed Successfully')
-    return redirect(url_for('report', id=request.form['project_id']))
+    return redirect(url_for('shift_input', id=request.form['project_id']))
 
 @app.teardown_appcontext
 def remove_session(*args, **kwargs):

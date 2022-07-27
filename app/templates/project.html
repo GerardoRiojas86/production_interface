@@ -37,44 +37,55 @@
 
 <hr>
 
-<!-- Collection of cards layed out in rows -->
-<div class="row row-cols-1 row-cols-md-12 mb-12 text-center">
+<div class="container-responsive">
 
-  <!-- Line bar productivity -->
-  <div class="col">
-    <div class="card mb-3 rounded-3 shadow-sm">
-      <div class="card-header py-3">
-        <h4 class="my-0 fw-normal">Productivity</h4>
-      </div>
-      <div class="card-body">
-        <canvas class="my-4 w-100" id="dailyProductivityLineChart" width="900" height="380"></canvas>              
-      </div>
-    </div>
-  </div>
+  <!-- Date display and group cards of totals and graphs -->
+  <div>
+    <h1 class="display-4">{{ shift_readable_date }}</h1>
+    <br>
 
-  <!-- Doughnut downtime  -->
-  <div class="col">
-    <div class="card mb-3 rounded-3 shadow-sm">
-      <div class="card-header py-3">
-        <h4 class="my-0 fw-normal">Downtime by reason</h4>
+    <!-- Productivity card  -->
+    <div class="card-deck">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title display-4">{{ total['production']['reality'] }} <small>pc.</small></h5>
+          <p class="card-text">Total amount of pieces produced today.</p>
+          {% if total['production']['reality'] > 0 %}
+            <canvas class="my-4 w-100" id="dailyProductivityLineChart" width="900" height="380"></canvas>
+          {% endif %}
+          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+        </div>
       </div>
-      <div class="card-body">
-        <canvas class="my-4 w-100" id="dailyDowntimeChart" width="900" height="380"></canvas>              
-      </div>
-    </div>
-  </div>
 
-  <!-- Doughnut defects  -->
-  <div class="col">
-    <div class="card mb-3 rounded-3 shadow-sm">
-      <div class="card-header py-3">
-        <h4 class="my-0 fw-normal">Defects by reason</h4>
+      <!-- Defects card -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title display-4">{{ total['defects'] }} <small>pc.</small></h5>
+          <p class="card-text">Total amount of defects identified today.</p>
+          {% if total['defects'] > 0 %}
+            <canvas class="my-4 w-100" id="dailyDowntimeChart" width="900" height="380"></canvas>
+          {% endif %}
+          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+        </div>
       </div>
-      <div class="card-body">
-        <canvas class="my-4 w-100" id="dailyDefectsChart" width="900" height="380"></canvas>              
+
+      <!-- Downtimes card -->
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title display-4">{{ total['downtime'] }} <small>min.</small></h5>
+          <p class="card-text">Total minutes of downtime occurred today.</p>
+          {% if total['downtime'] > 0 %}
+            <canvas class="my-4 w-100" id="dailyDefectsChart" width="900" height="380"></canvas>
+          {% endif %}
+          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
+        </div>
       </div>
+
     </div>
+    <br>    
   </div>
+  
+  
 
 </div>
 
