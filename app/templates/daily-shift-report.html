@@ -67,6 +67,14 @@
           </tr>
         {% endfor %}
       </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row" class="text-start">Total</th>
+          <td>{{ total['production']['reality'] }} <small>pcs</small></td>
+          <td>{{ total['defects'] }} <small>pcs</small></td>
+          <td>{{ total['downtime'] }} <small>mins</small></td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>
