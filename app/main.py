@@ -166,30 +166,6 @@ def shift_input(id):
                           shift_readable_date=current_date_readable,
                           project=project)
 
-@app.route('/project/<id>/report/daily', methods=['GET', 'POST'])
-def daily_report(id):
-
-  if request.method == 'POST': 
-    shift_date= request.form['shift_date']
-  
-  elif request.method == 'GET': 
-    shift_date = datetime.datetime.today().strftime('%Y-%m-%d')
-
-  project = get_project_by_id(id)
-
-  shift_data = get_shift_data(shift_date, project['id'], project['rate'], project['goal'])
-
-  shift_readable_date = datetime.datetime.strptime(shift_date, '%Y-%m-%d').strftime('%B %d, %Y')
-
-  # print(json.dumps(project, indent=4))
-
-  return render_template('daily-shift-report.html', 
-                          shift_date=shift_date,
-                          shift_readable_date=shift_readable_date,
-                          project=project,
-                          data=shift_data['data'],
-                          total=shift_data['total'])
-
 @app.route('/production', methods = ['GET'])
 def get_production():
     production = app.session.query(models.Production).all()
