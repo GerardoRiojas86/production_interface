@@ -38,54 +38,219 @@
 <hr>
 
 <div class="container-responsive">
+  
+  <!-- Title -->
+  <h1 class="display-4">{{ shift_readable_date }}</h1>
+  <br>
 
-  <!-- Date display and group cards of totals and graphs -->
-  <div>
-    <h1 class="display-4">{{ shift_readable_date }}</h1>
-    <br>
+  <!-- Card deck containign productivity, defect and downtime graphs -->
+  <div class="card-deck">
 
-    <!-- Productivity card  -->
-    <div class="card-deck">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title display-4">{{ total['production']['reality'] }} <small>pc.</small></h5>
-          <p class="card-text">Total amount of pieces produced today.</p>
-          {% if total['production']['reality'] > 0 %}
-            <canvas class="my-4 w-100" id="dailyProductivityLineChart" width="900" height="380"></canvas>
-          {% endif %}
-          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-        </div>
+    <!-- General details card  -->
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h6><small>Project</small></h6>
+        <h5 class="card-title display-4">{{ project['name'] }}</h5>
+        <p class="card-text lead">Goal {{ project['goal'] }} <abbr title="Pieces per hour">pph</abbr>, Rate {{ project['rate'] }} <abbr title="Pieces per hour">pph</abbr></p>
       </div>
-
-      <!-- Defects card -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title display-4">{{ total['defects'] }} <small>pc.</small></h5>
-          <p class="card-text">Total amount of defects identified today.</p>
-          {% if total['defects'] > 0 %}
-            <canvas class="my-4 w-100" id="dailyDefectsChart" width="900" height="380"></canvas>
-          {% endif %}
-          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-        </div>
-      </div>
-
-      <!-- Downtimes card -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 class="card-title display-4">{{ total['downtime'] }} <small>min.</small></h5>
-          <p class="card-text">Total minutes of downtime occurred today.</p>
-          {% if total['downtime'] > 0 %}
-            <canvas class="my-4 w-100" id="dailyDowntimeChart" width="900" height="380"></canvas>
-          {% endif %}
-          <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
-        </div>
-      </div>
-
     </div>
-    <br>    
+    
+    <!-- Productivity card  -->
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h5 class="card-title display-4">{{ total['production']['reality'] }} <small>pc.</small></h5>
+        <p class="card-text">Total amount of pieces produced today.</p>
+        {% if total['production']['reality'] > 0 %}
+          <canvas class="my-4 w-100" id="dailyProductivityLineChart" width="900" height="380"></canvas>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Defects card -->
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h5 class="card-title display-4">{{ total['defects'] }} <small>pc.</small></h5>
+        <p class="card-text">Total amount of defects identified today.</p>
+        {% if total['defects'] > 0 %}
+          <canvas class="my-4 w-100" id="dailyDefectsChart" width="900" height="380"></canvas>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Downtimes card -->
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h5 class="card-title display-4">{{ total['downtime'] }} <small>min.</small></h5>
+        <p class="card-text">Total minutes of downtime occurred today.</p>
+        {% if total['downtime'] > 0 %}
+          <canvas class="my-4 w-100" id="dailyDowntimeChart" width="900" height="380"></canvas>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Table card -->
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h5 class="card-title display-4">Shift data</h5>
+        <p class="card-text">Breakdown of shift inputs by hour.</p>
+
+        <!-- Responsive data table -->
+        <div class="table-responsive">
+          <table class="table text-center table-hover table-md">
+            <thead>
+              <tr>
+                <th style="width: 2%"></th>
+                <th style="width: 2%;">Time</th>
+                <th style="width: 32%;">Produced</th>
+                <th style="width: 32%;">Defects</th>
+                <th style="width: 32%;">Downtime</th>
+              </tr>
+            </thead>
+
+            <tbody class="accordion" id="accordionExample">
+
+              {% for key, row in data.items() %}
+
+                {% if row %}
+                  <div class="accordion-item">
+                    <tr class="accordion-header" id="rowHeader{{ loop.index }}" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#rowCollapse{{ loop.index }}" aria-expanded="true" aria-controls="rowCollapse{{ loop.index }}">
+                      <th></th>
+                      <th>{{ key }}</th>
+                      <td>{{ row.reality }} <small>pcs</small></td>
+                      <td>{{ row.defects }} <small>pcs</small></td>
+                      <td>{{ row.downtime }} <small>mins</small></td>
+                    </tr>
+                
+                    <tr>
+                      <th></th>
+                      <td colspan="4" class="p-0">
+                        <div id="rowCollapse{{ loop.index }}" class="accordion-collapse collapse sow bg-light" aria-labelledby="rowHeader{{ loop.index }}" data-bs-parent="#accordionExample">
+                          <div class="accordion-body">
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-sm-6">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <h5 class="card-title">Defects</h5>
+                                      {% for row in defects['models'] %}
+                                        {% if row['shift_time'] == key %}
+                                          <p class="card-text">{{ row['model'] }}: {{ row['quantity'] }} pc.</p>
+                                        {% endif %}
+                                      {% endfor %}
+                                    </div>
+                                  </div>                                     
+                                </div>
+                                <div class="col-sm-6">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <h5 class="card-title">Downtimes</h5>
+                                      {% for row in downtimes['models'] %}
+                                        {% if row['shift_time'] == key %}
+                                          <p class="card-text">{{ row['model'] }}: {{ row['quantity'] }} pc.</p>
+                                        {% endif %}
+                                      {% endfor %}
+                                    </div>
+                                  </div>                                  
+                                </div>
+                              </div>
+                                  
+                                
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </div>
+                {% else %}
+                  <tr>
+                    <th></th>
+                    <th scope="row" class="text-start">{{ key }}</th>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                  </tr>   
+                {% endif %}
+
+              {% endfor %}
+
+            </tbody>
+            <tfoot>
+              <tr>
+                <th></th>
+                <th scope="row" class="text-start">Total</th>
+                <td>{{ total['production']['reality'] }} <small>pcs</small></td>
+                <td>{{ total['defects'] }} <small>pcs</small></td>
+                <td>{{ total['downtime'] }} <small>mins</small></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+          <!-- Responsive data table -->
+          <!-- <div class="table-responsive">
+            <table class="table text-center table-hover table-md">
+              <thead>
+                <tr>
+                  <th style="width: 2%;">Time</th>
+                  <th style="width: 33%;">Produced</th>
+                  <th style="width: 33%;">Defects</th>
+                  <th style="width: 33%;">Downtime</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for key, row in data.items() %}
+                  <tr>
+                    <th scope="row" class="text-start">{{ key }}</th>
+                    {% if row %}
+                      {% if row.reality != 0 and row.reality < project.goal %}
+                        <td class="table-danger">
+                          <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">
+                            {{ row.reality }} <small>pcs</small>
+                          </a>
+                        </td>
+                      {% else %}
+                        <td>{{ row.reality }} <small>pcs</small></td>
+                      {% endif %}
+
+                      {% if row.defects > (0.05 * row.reality) %}
+                        <td class="table-danger">{{ row.defects }} <small>pcs</small></td>
+                      {% else %}
+                        <td>{{ row.defects }} <small>pcs</small></td>
+                      {% endif %}
+
+                      {% if row.downtime >= 30 %}
+                        <td class="table-danger">{{ row.downtime }} <small>mins</small></td> 
+                      {% else %}
+                        <td>{{ row.downtime }} <small>mins</small></td>
+                      {% endif %}
+
+                    {% else %}
+                      <td>-</td>
+                      <td>-</td>
+                      <td>-</td>
+                    {% endif %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th scope="row" class="text-start">Total</th>
+                  <td>{{ total['production']['reality'] }} <small>pcs</small></td>
+                  <td>{{ total['defects'] }} <small>pcs</small></td>
+                  <td>{{ total['downtime'] }} <small>mins</small></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>  -->
+
+
+      </div>
+    </div>
   </div>
+  <br>
   
-  
+
+
 
 </div>
 
