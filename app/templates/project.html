@@ -144,9 +144,9 @@
                                   <div class="card">
                                     <div class="card-body">
                                       <h5 class="card-title">Downtimes</h5>
-                                      {% for row in downtimes['models'] %}
+                                      {% for row in downtimes['reasons'] %}
                                         {% if row['shift_time'] == key %}
-                                          <p class="card-text">{{ row['model'] }}: {{ row['quantity'] }} pc.</p>
+                                          <p class="card-text">{{ row['reason'] }}: {{ row['quantity'] }} min.</p>
                                         {% endif %}
                                       {% endfor %}
                                     </div>
@@ -185,65 +185,6 @@
             </tfoot>
           </table>
         </div>
-
-          <!-- Responsive data table -->
-          <!-- <div class="table-responsive">
-            <table class="table text-center table-hover table-md">
-              <thead>
-                <tr>
-                  <th style="width: 2%;">Time</th>
-                  <th style="width: 33%;">Produced</th>
-                  <th style="width: 33%;">Defects</th>
-                  <th style="width: 33%;">Downtime</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for key, row in data.items() %}
-                  <tr>
-                    <th scope="row" class="text-start">{{ key }}</th>
-                    {% if row %}
-                      {% if row.reality != 0 and row.reality < project.goal %}
-                        <td class="table-danger">
-                          <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-placement="bottom" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">
-                            {{ row.reality }} <small>pcs</small>
-                          </a>
-                        </td>
-                      {% else %}
-                        <td>{{ row.reality }} <small>pcs</small></td>
-                      {% endif %}
-
-                      {% if row.defects > (0.05 * row.reality) %}
-                        <td class="table-danger">{{ row.defects }} <small>pcs</small></td>
-                      {% else %}
-                        <td>{{ row.defects }} <small>pcs</small></td>
-                      {% endif %}
-
-                      {% if row.downtime >= 30 %}
-                        <td class="table-danger">{{ row.downtime }} <small>mins</small></td> 
-                      {% else %}
-                        <td>{{ row.downtime }} <small>mins</small></td>
-                      {% endif %}
-
-                    {% else %}
-                      <td>-</td>
-                      <td>-</td>
-                      <td>-</td>
-                    {% endif %}
-                  </tr>
-                {% endfor %}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th scope="row" class="text-start">Total</th>
-                  <td>{{ total['production']['reality'] }} <small>pcs</small></td>
-                  <td>{{ total['defects'] }} <small>pcs</small></td>
-                  <td>{{ total['downtime'] }} <small>mins</small></td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>  -->
-
-
       </div>
     </div>
   </div>

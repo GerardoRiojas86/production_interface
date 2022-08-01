@@ -173,9 +173,9 @@ def get_hourly_downtime_data(date, project_id):
   downtime_reasons_df = downtime_df[['reason', 'quantity']].groupby(['reason']).sum()
 
 
-  downtimes_hourly_by_model_df = downtime_df[['timestamp', 'model', 'reason', 'quantity']].groupby(['timestamp', 'model', 'reason'], as_index=False).sum()
-  downtimes_hourly_by_model_df['timestamp'] = downtimes_hourly_by_model_df['timestamp'].dt.strftime('%-H:00')
-  downtimes_hourly_by_model_df.rename(columns={"timestamp": "shift_time"}, inplace=True)
+  downtimes_hourly_by_reason = downtime_df[['timestamp', 'reason', 'quantity']].groupby(['timestamp', 'reason'], as_index=False).sum()
+  downtimes_hourly_by_reason['timestamp'] = downtimes_hourly_by_reason['timestamp'].dt.strftime('%-H:00')
+  downtimes_hourly_by_reason.rename(columns={"timestamp": "shift_time"}, inplace=True)
 
   if downtime_reasons_df.empty:
     downtime_reasons_dict = {}
@@ -203,7 +203,7 @@ def get_hourly_downtime_data(date, project_id):
     },
     "total": daily_total_downtime,
     "data": list(downtime_hourly_data.values()),
-    "models": downtimes_hourly_by_model_df.to_dict('records')
+    "reasons": downtimes_hourly_by_reason.to_dict('records')
   }
 
 def get_shift_data(shift_date, project_id, project_rate, project_goal):
