@@ -37,7 +37,6 @@ app.secret_key = 'mysecretkey'
 @app.route('/', methods=['GET'])
 def home():
   data = get_projects()
-  print(data)
   return render_template('projects.html', projects=data, add_project=True)
 
 @app.route('/projects/form', methods=['GET'])
@@ -138,6 +137,8 @@ def show_project(id):
   
   shift_readable_date = datetime.datetime.strptime(current_date, '%Y-%m-%d').strftime('%B %d, %Y')
 
+  print(json.dumps(shift_data, indent=4))
+  
   return render_template('project.html', 
                           project=project,
                           shift_date=current_date,
@@ -147,7 +148,8 @@ def show_project(id):
                           production=shift_data['production'],
                           downtimes=shift_data['downtimes'],
                           defects=shift_data['defects'],
-                          total=shift_data['total']
+                          total=shift_data['total'],
+                          data=shift_data['data']
                         )
 
 @app.route('/project/<id>/shift-input', methods=['GET'])
@@ -179,7 +181,7 @@ def daily_report(id):
 
   shift_readable_date = datetime.datetime.strptime(shift_date, '%Y-%m-%d').strftime('%B %d, %Y')
 
-  print(json.dumps(shift_data, indent=4))
+  # print(json.dumps(project, indent=4))
 
   return render_template('daily-shift-report.html', 
                           shift_date=shift_date,

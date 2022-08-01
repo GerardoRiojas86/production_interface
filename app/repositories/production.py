@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import current_app
 import pandas as pd
 import json 
+import re
 
 from .. import  models
 from ..database import engine
@@ -63,8 +64,9 @@ def get_hourly_production_data(date, project_id, project_rate, project_goal):
   production_df = production_query.__get_data_frame__()
   production_dict = production_df.to_dict('records')
 
-  # production_reality_df = production_df[['shift_time', 'quantity']].groupby(['shift_time'], as_index=False).sum()
-
+  
+  production_reality_model_df = production_df[['model', 'shift_time', 'quantity']].groupby(['shift_time', 'model'], as_index=False).sum()
+  print(production_reality_model_df)
   
   hourly_production_rate = {}
   hourly_production_goal = {}
@@ -80,10 +82,11 @@ def get_hourly_production_data(date, project_id, project_rate, project_goal):
     hourly_production_reality[shift_hour] = shift_hour_data['quantity'] if shift_hour_data else 0
     hourly_production_goal[shift_hour] = project_goal
     hourly_production_rate[shift_hour] = project_rate
-
+  
     daily_production_reality += hourly_production_reality[shift_hour]
     daily_production_goal += project_goal
     daily_production_rate += project_rate
+    
 
   return {
     "reality": {
@@ -119,6 +122,10 @@ def get_hourly_defect_data(date, project_id):
   defect_df['timestamp'] = defect_df['shift_date'].astype(str) + " " + defect_df['shift_time'].astype(str)
   defect_df['timestamp'] = pd.to_datetime(defect_df['timestamp'], format='%Y-%m-%d %H:%M')
 
+  defects_hourly_by_model = defect_df[['timestamp', 'model', 'reason', 'quantity']].groupby(['timestamp', 'model', 'reason'], as_index=False).sum()
+  defects_hourly_by_model['timestamp'] = defects_hourly_by_model['timestamp'].dt.strftime('%-H:00')
+  defects_hourly_by_model.rename(columns={"timestamp": "shift_time"}, inplace=True)
+
   defects_reasons_df = defect_df[['reason', 'quantity']].groupby(['reason']).sum()
 
   if defects_reasons_df.empty:
@@ -136,8 +143,10 @@ def get_hourly_defect_data(date, project_id):
 
   for hour in SHIFT_HOURS:
     res = defect_hourly_df.loc[ defect_hourly_df['timestamp'] == hour ]
-    defect_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
+
+    defect_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0
     daily_total_defects += defect_hourly_data[hour]
+      
 
   return {
     "groups": {
@@ -146,7 +155,8 @@ def get_hourly_defect_data(date, project_id):
       "values": list(defects_reasons_dict.values())
     },
     "total": daily_total_defects,
-    "data": list(defect_hourly_data.values())
+    "data": list(defect_hourly_data.values()),
+    "models": defects_hourly_by_model.to_dict('records')
   }
 
 def get_hourly_downtime_data(date, project_id): 
@@ -161,6 +171,11 @@ def get_hourly_downtime_data(date, project_id):
   downtime_df['timestamp'] = pd.to_datetime(downtime_df['timestamp'], format='%Y-%m-%d %H:%M')
 
   downtime_reasons_df = downtime_df[['reason', 'quantity']].groupby(['reason']).sum()
+
+
+  downtimes_hourly_by_model_df = downtime_df[['timestamp', 'model', 'reason', 'quantity']].groupby(['timestamp', 'model', 'reason'], as_index=False).sum()
+  downtimes_hourly_by_model_df['timestamp'] = downtimes_hourly_by_model_df['timestamp'].dt.strftime('%-H:00')
+  downtimes_hourly_by_model_df.rename(columns={"timestamp": "shift_time"}, inplace=True)
 
   if downtime_reasons_df.empty:
     downtime_reasons_dict = {}
@@ -177,7 +192,7 @@ def get_hourly_downtime_data(date, project_id):
 
   for hour in SHIFT_HOURS:
     res = downtime_hourly_df.loc[ downtime_hourly_df['timestamp'] == hour ]
-    downtime_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0  
+    downtime_hourly_data[hour] = int(res.iloc[0]['quantity']) if not res.empty else 0
     daily_total_downtime += downtime_hourly_data[hour]
 
   return {
@@ -187,7 +202,8 @@ def get_hourly_downtime_data(date, project_id):
       "values": list(downtime_reasons_dict.values())
     },
     "total": daily_total_downtime,
-    "data": list(downtime_hourly_data.values())
+    "data": list(downtime_hourly_data.values()),
+    "models": downtimes_hourly_by_model_df.to_dict('records')
   }
 
 def get_shift_data(shift_date, project_id, project_rate, project_goal):
